@@ -1,0 +1,85 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon" xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" x:Class="P_DAO.MainWindow"
+        Title="MainWindow" Height="516" Width="824" Icon="Images/plane_128px.net.ico">
+    <Grid>
+
+        <dxb:BarManager>
+            <dxb:BarManager.Items>
+                <dxb:BarButtonItem x:Name="biOpen" Content="Open" Glyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/Open_16x16.png" LargeGlyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/Open_32x32.png"/>
+                <dxb:BarButtonItem x:Name="biNew" Content="New" Glyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/New_16x16.png" LargeGlyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/New_32x32.png"/>
+                <dxb:BarCheckItem x:Name="biCenter" Glyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Format/AlignCenter_16x16.png" GroupIndex="1"/>
+                <dxb:BarCheckItem x:Name="biRight" Glyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Format/AlignRight_16x16.png" GroupIndex="1"/>
+                <dxb:BarCheckItem x:Name="biLeft" Glyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Format/AlignLeft_16x16.png" GroupIndex="1" IsChecked="True"/>
+                <dxb:BarStaticItem x:Name="biRow" Content="Row:" ShowBorder="False"/>
+                <dxb:BarStaticItem x:Name="biRowValue" Content="1"/>
+                <dxb:BarStaticItem x:Name="biColumn" Content="Column:" ShowBorder="False"/>
+                <dxb:BarStaticItem x:Name="biColumnValue" Content="1"/>
+            </dxb:BarManager.Items>
+            <DockPanel>
+                <dxr:RibbonControl DockPanel.Dock="Top" RibbonStyle="Office2010">
+                    <dxr:RibbonControl.ApplicationMenu>
+                        <dxr:BackstageViewControl>
+                            <dxr:BackstageTabItem Content="Last documents">
+                                <dxr:BackstageTabItem.ControlPane>
+                                    <Grid/>
+                                </dxr:BackstageTabItem.ControlPane>
+                            </dxr:BackstageTabItem>
+                            <dxr:BackstageTabItem Content="Properties">
+                                <dxr:BackstageTabItem.ControlPane>
+                                    <Grid/>
+                                </dxr:BackstageTabItem.ControlPane>
+                            </dxr:BackstageTabItem>
+                            <dxr:BackstageButtonItem Content="Close"/>
+                        </dxr:BackstageViewControl>
+                    </dxr:RibbonControl.ApplicationMenu>
+                    <dxr:RibbonControl.ToolbarItemLinks>
+                        <dxb:BarButtonItemLink BarItemName="biOpen"/>
+                        <dxb:BarButtonItemLink BarItemName="biNew"/>
+                    </dxr:RibbonControl.ToolbarItemLinks>
+                    <dxr:RibbonDefaultPageCategory>
+                        <dxr:RibbonPage Caption="Home">
+                            <dxr:RibbonPageGroup Caption="File">
+                                <dxb:BarButtonItemLink BarItemName="biOpen"/>
+                                <dxb:BarButtonItemLink BarItemName="biNew"/>
+                            </dxr:RibbonPageGroup>
+                        </dxr:RibbonPage>
+                    </dxr:RibbonDefaultPageCategory>
+                </dxr:RibbonControl>
+                <dxr:RibbonStatusBarControl DockPanel.Dock="Bottom">
+                    <dxr:RibbonStatusBarControl.LeftItemLinks>
+                        <dxb:BarItemLink BarItemName="biRow"/>
+                        <dxb:BarItemLink BarItemName="biRowValue"/>
+                        <dxb:BarItemLink BarItemName="biColumn"/>
+                        <dxb:BarItemLink BarItemName="biColumnValue"/>
+                    </dxr:RibbonStatusBarControl.LeftItemLinks>
+                    <dxr:RibbonStatusBarControl.RightItemLinks>
+                        <dxb:BarItemLink BarItemName="biLeft"/>
+                        <dxb:BarItemLink BarItemName="biCenter"/>
+                        <dxb:BarItemLink BarItemName="biRight"/>
+                    </dxr:RibbonStatusBarControl.RightItemLinks>
+                </dxr:RibbonStatusBarControl>
+                <Grid>
+                    <dxdo:DockLayoutManager>
+                        <dxdo:LayoutGroup>
+                            <dxdo:LayoutPanel Caption="ProductStructure">
+                                <dxg:TreeListControl Name="productStructureTree" AutoGenerateColumns="AddNew" EnableSmartColumnsGeneration="True">
+                                    <dxg:TreeListControl.View>
+                                        <dxg:TreeListView  Name="structureView" KeyFieldName="ID" ParentFieldName="ParentID" AllowPerPixelScrolling="True" ShowTotalSummary="True" AllowEditing="False" AutoWidth="True"/>
+                                    </dxg:TreeListControl.View>
+                                </dxg:TreeListControl>
+                            </dxdo:LayoutPanel>
+                            <dxdo:DocumentGroup Name="ProductGroup">
+                                <dxdo:DocumentPanel Caption="ActiveProduct">
+                                    <Grid/>
+                                </dxdo:DocumentPanel>
+                            </dxdo:DocumentGroup>
+                        </dxdo:LayoutGroup>
+                    </dxdo:DockLayoutManager>
+                </Grid>
+            </DockPanel>
+        </dxb:BarManager>
+
+    </Grid>
+</Window>
