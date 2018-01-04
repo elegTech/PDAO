@@ -6,10 +6,6 @@
  * 日期: 2018.1.3;
  * 
  * */
-
-
-
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +13,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Xml;
+using System.Data;
+
 
 using P_DAO.BusnessLogics;
 
@@ -29,12 +27,15 @@ namespace P_DAO.DomainEntities
     {
         #region members
         
-        // Product Name
         private string mProductName;
+        private string mParMinValue;
+        private string mParMaxValue;
 
         private XmlDocument mProductXML;
 
-      
+        private List<Product> mSubProductList;
+
+        private DataTable mDataTable;
 
         #endregion
 
@@ -45,10 +46,9 @@ namespace P_DAO.DomainEntities
             set { mProductName = value; }
         }
 
-        public XmlDocument ProductData
+        public DataTable ProductData
         {
-            get { return mProductXML; }
-            set { mProductXML = value; }
+            get { return mDataTable; }
         }
 
 
@@ -58,24 +58,36 @@ namespace P_DAO.DomainEntities
         // Default constructor.
         public Product()
         {
-            this.mProductName = "New Product";
-
+            //mSubProductList = new List<Product>();
             mProductXML = new XmlDocument();
-
-            mProductXML.LoadXml("<Product>" + mProductName + "</Product>");
+            mProductXML.Load(XmlReader.Create(@"C:\CodeProjects\P-DAO\Resources\testXML.xml"));
+            mDataTable = GenerateData();
         }
 
         // Construct an instance from a XML file.
         public Product(XmlDocument productXmlDoc)
         {
+            //mSubProductList = new List<Product>();
             mProductXML = productXmlDoc;
+            mDataTable = GenerateData();
         }
                 
         #endregion
 
 
         #region Private logics
-        
+
+        private DataTable GenerateData()
+        {
+            if (null == mProductXML)
+                return null;
+
+            DataSet ds = Utilities.ConvertXMLToDataSet(mProductXML.InnerXml);
+            if (null != ds && ds.Tables.Count > 0)
+                return ds.Tables[0];
+
+            return null;
+        }
 
 
         #endregion

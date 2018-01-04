@@ -17,19 +17,30 @@ using System.Threading.Tasks;
 
 using DevExpress.Xpf.Docking;
 
+using P_DAO.DomainEntities;
+
 namespace P_DAO.BusnessLogics
 {
     class ProductInfoViewerManager
     {
-
         DocumentGroup mProductInfoUIViewers;
 
         public ProductInfoViewerManager(DocumentGroup prodDocGroup)
         {
             mProductInfoUIViewers = prodDocGroup;
-            
         }
 
+        public void CreateProductInformationViewer(Product product)
+        {
+            if (null == product)
+                return;
+
+            DocumentPanel panel = new DocumentPanel();
+            panel.Visibility = System.Windows.Visibility.Hidden;
+            panel.Caption = product.Name;
+            mProductInfoUIViewers.Add(panel);
+            panel.Visibility = System.Windows.Visibility.Visible;
+        }
 
     }
 }

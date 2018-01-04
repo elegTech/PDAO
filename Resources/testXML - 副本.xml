@@ -1,0 +1,4 @@
+<Product Name="product" ID=1 ParentID=0>
+<Product Name="subProduct" ID=2 ParentID=1>
+</Product>
+</Product>

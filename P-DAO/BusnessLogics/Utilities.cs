@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
+using System.Data;
 
 namespace P_DAO.BusnessLogics
 {
@@ -40,7 +41,33 @@ namespace P_DAO.BusnessLogics
 
             return xmlDoc;
         }
-        
+
+        public static DataSet ConvertXMLToDataSet(string xmlData)
+        {
+            StringReader stream = null;
+            XmlTextReader reader = null;
+            try
+            {
+                DataSet xmlDS = new DataSet();
+                stream = new StringReader(xmlData);
+                reader = new XmlTextReader(stream);
+                xmlDS.ReadXml(reader);
+                return xmlDS;
+            }
+            catch (Exception ex)
+            {
+                string strTest = ex.Message;
+                return null;
+            }
+            finally
+            {
+                if (null != reader)
+                    reader.Close();
+                if (null != stream)
+                    stream.Close();
+            }
+        }
+
 
 
 

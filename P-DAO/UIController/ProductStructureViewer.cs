@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DevExpress.Xpf.Grid;
 using System.Xml;
+using System.Data;
 
 using P_DAO.DomainEntities;
 
@@ -17,9 +18,7 @@ namespace P_DAO.UIController
 
         private TreeListControl mProductUIViewer;
 
-        private XmlDocument mProductData;
-
-
+        private DataTable mProductData;
 
         #endregion
 
@@ -30,7 +29,7 @@ namespace P_DAO.UIController
             set { mProductUIViewer = value;}
         }
 
-        public XmlDocument DataSource
+        public DataTable ProductData
         {
             get { return mProductData; }
             set { mProductData = value; }
@@ -56,8 +55,8 @@ namespace P_DAO.UIController
                 mProductUIViewer.ItemsSource = null;
                 return;
             }
-
-            mProductUIViewer.ItemsSource = product.ProductData;
+            mProductData = product.ProductData;
+            mProductUIViewer.ItemsSource = mProductData;
             mProductUIViewer.RefreshData();
         }
 

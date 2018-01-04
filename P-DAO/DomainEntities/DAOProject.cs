@@ -26,8 +26,8 @@ namespace P_DAO.DomainEntities
         public delegate void ProductLoadEventHandler(Product product);
 
         public event ProductCloseEventHandler CloseEvent;
-        public event ProductCreateEventHandler CreateEvent;
-        public event ProductLoadEventHandler LoadEvent;
+        public event ProductCreateEventHandler ProductCreateAfterEvent;
+        public event ProductLoadEventHandler ProductLoadAfterEvent;
 
 
 
@@ -67,7 +67,7 @@ namespace P_DAO.DomainEntities
         /// </summary>
         private void InitializeComponents()
         {
-            if (null == mMainUI || null == mProduct)
+            if (null == mMainUI)
                 return;
 
             // 初始化产品树形结构视图
@@ -75,27 +75,33 @@ namespace P_DAO.DomainEntities
 
             // 初始化时根目录产品为当前活动产品，因此
             // 使用根目录产品名称为产品信息视图窗口名赋值.
-            string documentGroupName = "ProductGroup";
-            object documentGroup = mMainUI.FindName(documentGroupName);
-            if (documentGroup is DocumentGroup)
-            {
-                DocumentGroup group = documentGroup as DocumentGroup;
-                DocumentPanel panel = new DocumentPanel();
-                panel.Caption = mProduct.Name;
-                group.Add(panel);
-                mProdInfoViewerMgr = new ProductInfoViewerManager(group);
-            }
+
+            //string documentGroupName = "ProductGroup";
+            //object documentGroup = mMainUI.FindName(documentGroupName);
+            //if (documentGroup is DocumentGroup)
+            //{
+            //    DocumentGroup group = documentGroup as DocumentGroup;
+            //    DocumentPanel panel = new DocumentPanel();
+            //    if (null != mProduct)
+            //        panel.Caption = mProduct.Name;
+            //    else
+            //        panel.Caption = "Blank";
+            //    group.Add(panel);
+            //    mProdInfoViewerMgr = new ProductInfoViewerManager(group);
+            //}
 
             CloseEvent += mLogicProductStructureViewer.Refresh;
-            CreateEvent += mLogicProductStructureViewer.Refresh;
-            LoadEvent += mLogicProductStructureViewer.Refresh;
+            ProductCreateAfterEvent += mLogicProductStructureViewer.Refresh;
+            ProductLoadAfterEvent += mLogicProductStructureViewer.Refresh;
         }
+
 
         public bool OpenProuduct()
         {
+            if (null != mProduct)
+                mProduct.Save(productFilePath);
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
-
             openFileDialog.InitialDirectory = "c:\\";
             openFileDialog.Filter = "XML文件|*.xml";
             openFileDialog.RestoreDirectory = true;
@@ -107,7 +113,10 @@ namespace P_DAO.DomainEntities
             }
 
             if (null != mProduct)
+            {
+                ProductCreateAfterEvent(mProduct);
                 return true;
+            }
 
             return false;
         }
@@ -122,8 +131,7 @@ namespace P_DAO.DomainEntities
             }
 
             mProduct = new Product();
-            mLogicProductStructureViewer.DataSource = mProduct.ProductData;
-            mLogicProductStructureViewer.Refresh(mProduct);
+            ProductLoadAfterEvent(mProduct);
         }
 
 

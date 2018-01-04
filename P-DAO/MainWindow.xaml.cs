@@ -29,7 +29,7 @@ namespace P_DAO
         {
             InitializeComponent();
                         
-            productStructureTree.ItemsSource = Stuff.GetStuff();
+            //productStructureTree.ItemsSource = Stuff.GetStuff();
 
             designProject = new DAOProject(this); 
         }
