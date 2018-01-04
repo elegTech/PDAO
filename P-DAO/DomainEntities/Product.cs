@@ -15,22 +15,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using P_DAO.BusnessLogics;
 using System.IO;
 using System.Xml;
+
+using P_DAO.BusnessLogics;
+
+using P_DAO.UIController;
 
 
 namespace P_DAO.DomainEntities
 {
     class Product
     {
-
         #region members
         
         // Product Name
         private string mProductName;
 
         private XmlDocument mProductXML;
+
+      
 
         #endregion
 
@@ -41,6 +45,12 @@ namespace P_DAO.DomainEntities
             set { mProductName = value; }
         }
 
+        public XmlDocument ProductData
+        {
+            get { return mProductXML; }
+            set { mProductXML = value; }
+        }
+
 
 
         #region Constructors
@@ -49,33 +59,43 @@ namespace P_DAO.DomainEntities
         public Product()
         {
             this.mProductName = "New Product";
+
+            mProductXML = new XmlDocument();
+
+            mProductXML.LoadXml("<Product>" + mProductName + "</Product>");
         }
 
         // Construct an instance from a XML file.
-        public Product(string xmlPath)
+        public Product(XmlDocument productXmlDoc)
         {
-            LoadProduct(xmlPath);
+            mProductXML = productXmlDoc;
         }
                 
         #endregion
+
+
+        #region Private logics
         
 
+
+        #endregion
+
         #region Public Logics
-        public bool LoadProduct(string xmlFilePath)
-        {            
-            if (String.IsNullOrWhiteSpace(xmlFilePath))
-                return false;
 
-            if (!File.Exists(xmlFilePath))
-                return false;
+        /// <summary>
+        /// Save product information as a xml file.
+        /// </summary>
+        /// <param name="filePath"></param>
+        public void Save(string filePath)
+        {
+            if (null == filePath)
+                return;
 
-            mProductXML = Utilities.LoadXMLFile(xmlFilePath);
-            if (null == mProductXML)
-                return false;
-
-            mProductName = mProductXML.DocumentElement.Name;
-            return true;
+            mProductXML.Save(XmlWriter.Create(filePath));
         }
+
+
+
 
 
         #endregion

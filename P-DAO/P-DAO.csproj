@@ -52,6 +52,7 @@
     <Reference Include="DevExpress.Xpf.Ribbon.v14.1, Version=14.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -72,8 +73,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BusnessLogics\EventManager.cs" />
     <Compile Include="BusnessLogics\ProductInfoViewerManager.cs" />
     <Compile Include="DomainEntities\DAOProject.cs" />
+    <Compile Include="Serialization\Serializer.cs" />
     <Compile Include="UIController\ProductInformationViewer.cs" />
     <Compile Include="UIController\ProductStructureViewer.cs" />
     <Page Include="MainWindow.xaml">
@@ -125,6 +128,7 @@
   <ItemGroup>
     <Resource Include="Images\plane_128px.net.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -4,17 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DevExpress.Xpf.Grid;
+using System.Xml;
+
+using P_DAO.DomainEntities;
 
 
 namespace P_DAO.UIController
 {
     class ProductStructureViewer
     {
-#region members
+        #region members
 
         private TreeListControl mProductUIViewer;
-        
-#endregion
+
+        private XmlDocument mProductData;
+
+
+
+        #endregion
 
 
         public TreeListControl UIViewer
@@ -23,7 +30,11 @@ namespace P_DAO.UIController
             set { mProductUIViewer = value;}
         }
 
-
+        public XmlDocument DataSource
+        {
+            get { return mProductData; }
+            set { mProductData = value; }
+        }
 
 
 
@@ -37,6 +48,21 @@ namespace P_DAO.UIController
         #endregion
 
 
+        #region
+        public void Refresh(Product product)
+        {
+            if (null == product)
+            {
+                mProductUIViewer.ItemsSource = null;
+                return;
+            }
+
+            mProductUIViewer.ItemsSource = product.ProductData;
+            mProductUIViewer.RefreshData();
+        }
+
+
+        #endregion
 
 
 

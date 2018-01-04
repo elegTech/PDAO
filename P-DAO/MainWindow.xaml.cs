@@ -22,13 +22,26 @@ namespace P_DAO
     /// </summary>
     public partial class MainWindow : Window
     {
+        DAOProject designProject;
+
+
         public MainWindow()
         {
             InitializeComponent();
                         
             productStructureTree.ItemsSource = Stuff.GetStuff();
 
-            DAOProject designProject = new DAOProject(this); 
+            designProject = new DAOProject(this); 
+        }
+
+        private void biOpen_ItemClick_1(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            designProject.OpenProuduct();
+        }
+
+        private void biNew_ItemClick_1(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            designProject.CreateNewProuduct();
         }
     }
 }

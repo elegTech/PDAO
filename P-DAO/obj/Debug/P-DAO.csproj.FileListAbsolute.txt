@@ -15,3 +15,6 @@ D:\Projects\WPF\P-DAO\P-DAO\obj\Debug\PDAO.pdb
 C:\CodeProjects\P-DAO\P-DAO\bin\Debug\PDAO.exe.config
 C:\CodeProjects\P-DAO\P-DAO\obj\Debug\PDAO.exe
 C:\CodeProjects\P-DAO\P-DAO\obj\Debug\PDAO.pdb
+D:\Projects\WPF\P-DAO\P-DAO\bin\Debug\websocket-sharp.dll
+D:\Projects\WPF\P-DAO\P-DAO\bin\Debug\websocket-sharp.xml
+D:\Projects\WPF\P-DAO\P-DAO\obj\Debug\App.baml
