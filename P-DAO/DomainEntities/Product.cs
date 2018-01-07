@@ -1,6 +1,6 @@
 ﻿/*
  * 产品类，用于表示一个独立的产品设计任务，任何时候仅能进行一个产品设计活动;
- *  
+ * 产品包含若干子产品，逐层包含形成树状产品结构 
  * 
  * 作者: 樊红日;
  * 日期: 2018.1.3;
@@ -33,7 +33,7 @@ namespace P_DAO.DomainEntities
 
         private XmlDocument mProductXML;
 
-        private List<Product> mSubProductList;
+        private List<Product> mChildProductList;
 
         private DataTable mDataTable;
 
@@ -60,9 +60,11 @@ namespace P_DAO.DomainEntities
         {
             //mSubProductList = new List<Product>();
             mProductXML = new XmlDocument();
-            mProductXML.Load(XmlReader.Create(@"C:\CodeProjects\P-DAO\Resources\testXML.xml"));
+            mProductXML.LoadXml("<Product Name=\"NewProduct\"></Product>");
             mDataTable = GenerateData();
+            mProductName = mProductXML.DocumentElement.GetAttribute("Name");
         }
+        
 
         // Construct an instance from a XML file.
         public Product(XmlDocument productXmlDoc)
@@ -70,12 +72,42 @@ namespace P_DAO.DomainEntities
             //mSubProductList = new List<Product>();
             mProductXML = productXmlDoc;
             mDataTable = GenerateData();
+            mChildProductList = new List<Product>();
+            mProductName = mProductXML.DocumentElement.GetAttribute("Name");
+            GenerateProductTree(mProductXML.DocumentElement, this);
+            
         }
                 
         #endregion
 
 
         #region Private logics
+
+
+        private void AddChildProduct(Product child)
+        {
+            if (null == child)
+                return;
+
+            mChildProductList.Add(child);
+        }
+
+
+        private void GenerateProductTree(XmlNode xmlNode, Product parentProduct)
+        {
+            if (null == xmlNode || null == parentProduct)
+                return;
+
+            foreach (XmlNode node in xmlNode.ChildNodes)//循环遍历当前元素的子元素集合
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(node.OuterXml);
+                Product child = new Product(doc);// 定义一个Product对象
+                parentProduct.AddChildProduct(child);
+                GenerateProductTree(node, child);// 调用本方法进行递归
+            }
+        }
+
 
         private DataTable GenerateData()
         {
@@ -107,6 +139,24 @@ namespace P_DAO.DomainEntities
         }
 
 
+        // 获取具有制定产品名的
+        public Product GetChildProduct(string productName, Product product)
+        {
+            if (string.IsNullOrWhiteSpace(productName) || null == product)
+                return null;
+
+            if (string.Equals(product.Name, productName, StringComparison.CurrentCultureIgnoreCase))
+                return product;
+
+            Product resultProduct = null;
+            foreach (Product childProduct in mChildProductList)
+            {
+                resultProduct = GetChildProduct(productName, childProduct);
+                if (null != resultProduct)
+                    break;
+            }
+            return resultProduct;
+        }
 
 
 

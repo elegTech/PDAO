@@ -12,8 +12,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Data;
 
+using DevExpress.Xpf.Grid.TreeList;
+using DevExpress.Xpf.Grid;
 using P_DAO.DomainEntities;
+using DevExpress.Xpf.Docking;
 
 namespace P_DAO
 {
@@ -43,5 +47,24 @@ namespace P_DAO
         {
             designProject.CreateNewProuduct();
         }
+
+        // Logics for a row has been double clicked.
+        private void structureView_RowDoubleClick(object sender, DevExpress.Xpf.Grid.RowDoubleClickEventArgs e)
+        {
+
+            //DocumentGroup documentGroup = (DocumentGroup)this.FindName("ProductGroup");
+
+            //documentGroup.SelectedTabIndex = 1;
+
+
+
+            if ( MouseButton.Left!= e.ChangedButton)
+                return;
+
+            designProject.ActivateProduct();
+        }
+
+
+
     }
 }

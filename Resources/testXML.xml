@@ -1,4 +1,1 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Product Name="product" ID="1" ParentID="0" Department="Market">
-  <Product Name="subProduct" ID="2" ParentID="1" Department="Design"></Product>
-</Product>
+﻿<?xml version="1.0" encoding="utf-8"?><Product Name="product" ID="1" ParentID="0" Department="Market"><Product Name="subProduct" ID="2" ParentID="1" Department="Design"></Product></Product>

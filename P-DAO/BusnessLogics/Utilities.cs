@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.Data;
+using System.Windows.Forms;
+
 
 namespace P_DAO.BusnessLogics
 {
@@ -36,9 +38,10 @@ namespace P_DAO.BusnessLogics
             }
             catch
             {
+                MessageBox.Show("该文件无法加载或已被加载！");
                 return null;   
             }
-
+            
             return xmlDoc;
         }
 

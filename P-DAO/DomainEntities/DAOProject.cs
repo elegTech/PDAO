@@ -14,7 +14,9 @@ using P_DAO.UIController;
 using P_DAO.BusnessLogics;
 using P_DAO.Serialization;
 
-using ProdInfoViewerList = System.Collections.Generic.List<P_DAO.UIController.ProductInformationViewer>; 
+using ProdInfoViewerList = System.Collections.Generic.List<P_DAO.UIController.ProductInformationViewer>;
+using DevExpress.Xpf.Grid;
+using System.Data; 
 
 namespace P_DAO.DomainEntities
 {
@@ -24,15 +26,20 @@ namespace P_DAO.DomainEntities
         public delegate void ProductCloseEventHandler(Product product);
         public delegate void ProductCreateEventHandler(Product product);
         public delegate void ProductLoadEventHandler(Product product);
+        public delegate void ProductActivateEventHandler(string productName);
 
         public event ProductCloseEventHandler CloseEvent;
         public event ProductCreateEventHandler ProductCreateAfterEvent;
         public event ProductLoadEventHandler ProductLoadAfterEvent;
+        public event ProductActivateEventHandler ProductActivateEvent;
 
 
 
         private string mProjectName = "No Project";
-        private Product mProduct;
+        
+        // 表示最高层产品
+        private Product mRootProduct;
+
 
         private string productFilePath; 
 
@@ -44,12 +51,12 @@ namespace P_DAO.DomainEntities
 
         public Product DesignProduct
         {
-            get { return mProduct; }
+            get { return mRootProduct; }
             set 
-            { 
-                mProduct = value;
-                if (null != mProduct)
-                    mProjectName = mProduct.Name;
+            {
+                mRootProduct = value;
+                if (null != mRootProduct)
+                    mProjectName = mRootProduct.Name;
             }
         }
 
@@ -72,34 +79,29 @@ namespace P_DAO.DomainEntities
 
             // 初始化产品树形结构视图
             mLogicProductStructureViewer = new ProductStructureViewer(mMainUI.productStructureTree);
+            
 
             // 初始化时根目录产品为当前活动产品，因此
             // 使用根目录产品名称为产品信息视图窗口名赋值.
 
-            //string documentGroupName = "ProductGroup";
-            //object documentGroup = mMainUI.FindName(documentGroupName);
-            //if (documentGroup is DocumentGroup)
-            //{
-            //    DocumentGroup group = documentGroup as DocumentGroup;
-            //    DocumentPanel panel = new DocumentPanel();
-            //    if (null != mProduct)
-            //        panel.Caption = mProduct.Name;
-            //    else
-            //        panel.Caption = "Blank";
-            //    group.Add(panel);
-            //    mProdInfoViewerMgr = new ProductInfoViewerManager(group);
-            //}
+            string documentGroupName = "ProductGroup";
+            DocumentGroup documentGroup = (DocumentGroup)mMainUI.FindName(documentGroupName);
+            mProdInfoViewerMgr = new ProductInfoViewerManager(documentGroup);
 
             CloseEvent += mLogicProductStructureViewer.Refresh;
             ProductCreateAfterEvent += mLogicProductStructureViewer.Refresh;
             ProductLoadAfterEvent += mLogicProductStructureViewer.Refresh;
+
+            ProductCreateAfterEvent += mProdInfoViewerMgr.CreateProductInformationViewer;
+            ProductLoadAfterEvent += mProdInfoViewerMgr.CreateProductInformationViewer;
+            ProductActivateEvent += mProdInfoViewerMgr.ShowProductInfoViewer;
         }
 
 
         public bool OpenProuduct()
         {
-            if (null != mProduct)
-                mProduct.Save(productFilePath);
+            if (null != mRootProduct)
+                mRootProduct.Save(productFilePath);
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.InitialDirectory = "c:\\";
@@ -109,12 +111,13 @@ namespace P_DAO.DomainEntities
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 productFilePath = openFileDialog.FileName;
-                mProduct = Serializer.LoadProduct(productFilePath);
+                mRootProduct = Serializer.LoadProduct(productFilePath);
             }
 
-            if (null != mProduct)
+            if (null != mRootProduct)
             {
-                ProductCreateAfterEvent(mProduct);
+                mProdInfoViewerMgr.RootProduct = mRootProduct;
+                ProductCreateAfterEvent(mRootProduct);
                 return true;
             }
 
@@ -125,15 +128,26 @@ namespace P_DAO.DomainEntities
         public void CreateNewProuduct()
         {
             // Save the current product design information.
-            if (null != mProduct)
+            if (null != mRootProduct)
             {
-                mProduct.Save(productFilePath);                
+                mRootProduct.Save(productFilePath);                
             }
 
-            mProduct = new Product();
-            ProductLoadAfterEvent(mProduct);
+            mRootProduct = new Product();
+            mProdInfoViewerMgr.RootProduct = mRootProduct;
+            ProductLoadAfterEvent(mRootProduct);
         }
 
+
+        public void ActivateProduct()
+        {
+            TreeListControl ctrl = (TreeListControl)mMainUI.FindName("productStructureTree");
+            TreeListNode node = ctrl.GetSelectedNodes()[0];
+            DataRowView rowView = (DataRowView)node.Content;
+            DataRow data = rowView.Row;
+
+            ProductActivateEvent((string)data["Name"]);        
+        }
 
     }
 }
