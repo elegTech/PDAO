@@ -20,6 +20,7 @@ using System.Windows.Forms;
 using DevExpress.Xpf.Docking;
 
 using P_DAO.DomainEntities;
+using P_DAO.UIController;
 
 namespace P_DAO.BusnessLogics
 {
@@ -27,7 +28,7 @@ namespace P_DAO.BusnessLogics
     {
         DocumentGroup mProductInfoUIViewers;
 
-        Dictionary<Product, DocumentPanel> mProduct2ViewerDictionary;
+        Dictionary<Product, ProductInformationViewer> mProduct2ViewerDictionary;
 
         private Product rootProduct;
 
@@ -42,7 +43,7 @@ namespace P_DAO.BusnessLogics
         public ProductInfoViewerManager(DocumentGroup prodDocGroup)
         {
             mProductInfoUIViewers = prodDocGroup;
-            mProduct2ViewerDictionary = new Dictionary<Product, DocumentPanel>();
+            mProduct2ViewerDictionary = new Dictionary<Product, ProductInformationViewer>();
         }
 
 
@@ -75,6 +76,8 @@ namespace P_DAO.BusnessLogics
         {
             if (null == product)
                 return;
+            if (mProduct2ViewerDictionary.ContainsKey(product))
+                return;
 
             DocumentPanel panel = new DocumentPanel();
             panel.Visibility = System.Windows.Visibility.Hidden;
@@ -85,7 +88,9 @@ namespace P_DAO.BusnessLogics
             int index = mProductInfoUIViewers.Items.IndexOf(panel);
             mProductInfoUIViewers.SelectedTabIndex = index;
 
-            mProduct2ViewerDictionary.Add(product, panel);
+            ProductInformationViewer productInfoViewer = new ProductInformationViewer(panel);
+
+            mProduct2ViewerDictionary.Add(product, productInfoViewer);
         }
 
         public void ShowProductInfoViewer(string productName)
@@ -97,9 +102,9 @@ namespace P_DAO.BusnessLogics
 
             if (null != product && mProduct2ViewerDictionary.Keys.Contains(product))
             {
-                mProduct2ViewerDictionary[product].Visibility = System.Windows.Visibility.Visible;
+                mProduct2ViewerDictionary[product].UIViewer.Visibility = System.Windows.Visibility.Visible;
 
-                int index = mProductInfoUIViewers.Items.IndexOf(mProduct2ViewerDictionary[product]);
+                int index = mProductInfoUIViewers.Items.IndexOf(mProduct2ViewerDictionary[product].UIViewer);
                 mProductInfoUIViewers.SelectedTabIndex = index;
             }
             else

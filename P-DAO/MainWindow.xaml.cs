@@ -38,12 +38,12 @@ namespace P_DAO
             designProject = new DAOProject(this); 
         }
 
-        private void biOpen_ItemClick_1(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        private void biOpen_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
         {
             designProject.OpenProuduct();
         }
 
-        private void biNew_ItemClick_1(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        private void biNew_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
         {
             designProject.CreateNewProuduct();
         }

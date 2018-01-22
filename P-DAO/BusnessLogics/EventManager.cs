@@ -30,6 +30,9 @@ namespace P_DAO.BusnessLogics
         public void RegisterOpenButton()
         {
             BarButtonItem openBtn = (BarButtonItem) mMainUI.FindName("biOpen");
+
+
+
         }
 
 

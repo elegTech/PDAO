@@ -7,8 +7,8 @@
 
         <dxb:BarManager>
             <dxb:BarManager.Items>
-                <dxb:BarButtonItem x:Name="biOpen" ItemClick="biOpen_ItemClick_1" Content="Open" Glyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/Open_16x16.png" LargeGlyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/Open_32x32.png"/>
-                <dxb:BarButtonItem x:Name="biNew" ItemClick="biNew_ItemClick_1"  Content="New" Glyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/New_16x16.png" LargeGlyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/New_32x32.png"/>
+                <dxb:BarButtonItem x:Name="biOpen" ItemClick="biOpen_ItemClick" Content="Open" Glyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/Open_16x16.png" LargeGlyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/Open_32x32.png"/>
+                <dxb:BarButtonItem x:Name="biNew" ItemClick="biNew_ItemClick"  Content="New" Glyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/New_16x16.png" LargeGlyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/New_32x32.png"/>
                 <dxb:BarCheckItem x:Name="biCenter" Glyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Format/AlignCenter_16x16.png" GroupIndex="1"/>
                 <dxb:BarCheckItem x:Name="biRight" Glyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Format/AlignRight_16x16.png" GroupIndex="1"/>
                 <dxb:BarCheckItem x:Name="biLeft" Glyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Format/AlignLeft_16x16.png" GroupIndex="1" IsChecked="True"/>
