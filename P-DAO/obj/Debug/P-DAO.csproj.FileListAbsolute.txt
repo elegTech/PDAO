@@ -49,3 +49,4 @@ C:\MyProjects\PDAO\P-DAO\obj\Debug\PDAO.g.resources
 C:\MyProjects\PDAO\P-DAO\obj\Debug\P_DAO.Properties.Resources.resources
 C:\MyProjects\PDAO\P-DAO\obj\Debug\P-DAO.csproj.GenerateResource.Cache
 C:\MyProjects\PDAO\P-DAO\obj\Debug\PDAO.exe.licenses
+C:\MyProjects\PDAO\P-DAO\obj\Debug\P-DAO.csprojResolveAssemblyReference.cache
