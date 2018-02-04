@@ -40,7 +40,6 @@ namespace P_DAO.DomainEntities
         // 表示最高层产品
         private Product mRootProduct;
 
-
         private string productFilePath; 
 
         // 主UI框架
@@ -65,8 +64,6 @@ namespace P_DAO.DomainEntities
         {
             mMainUI = uiWindow;
             InitializeComponents();
-
-
         }
 
         /// <summary>
@@ -116,6 +113,7 @@ namespace P_DAO.DomainEntities
 
             if (null != mRootProduct)
             {
+                mRootProduct.GenerateProductDependency();
                 mProdInfoViewerMgr.RootProduct = mRootProduct;
                 ProductCreateAfterEvent(mRootProduct);
                 return true;
@@ -148,6 +146,5 @@ namespace P_DAO.DomainEntities
 
             ProductActivateEvent((string)data["Name"]);        
         }
-
     }
 }

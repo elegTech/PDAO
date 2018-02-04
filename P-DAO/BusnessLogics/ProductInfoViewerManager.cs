@@ -98,12 +98,13 @@ namespace P_DAO.BusnessLogics
             if (string.IsNullOrWhiteSpace(productName))
                 return;
 
-            Product product = rootProduct.GetChildProduct(productName, rootProduct);
+            Product product = Product.GetProduct(productName);
 
             if (null != product && mProduct2ViewerDictionary.Keys.Contains(product))
             {
+                mProduct2ViewerDictionary[product].UIViewer.Closed = false;
                 mProduct2ViewerDictionary[product].UIViewer.Visibility = System.Windows.Visibility.Visible;
-
+               
                 int index = mProductInfoUIViewers.Items.IndexOf(mProduct2ViewerDictionary[product].UIViewer);
                 mProductInfoUIViewers.SelectedTabIndex = index;
             }

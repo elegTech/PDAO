@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
@@ -21,10 +22,10 @@ namespace P_DAO.Serialization
             if (!File.Exists(xmlFilePath))
                 return null;
 
-            XmlDocument xml = Utilities.LoadXMLFile(xmlFilePath);
+            XDocument xml = Utilities.LoadXMLFile(xmlFilePath);
 
             if (null != xml)
-                return new Product(xml);
+                return new Product(xml.Root, null);
 
             return null;
         }
@@ -34,10 +35,10 @@ namespace P_DAO.Serialization
             if (String.IsNullOrWhiteSpace(xmlFilePath))
                 return null;
 
-            XmlDocument xml = Utilities.LoadXMLFile(xmlFilePath);
+            XDocument xml = Utilities.LoadXMLFile(xmlFilePath);
 
             if (null != xml)
-                return new Product(xml);
+                return new Product(xml.Root, null);
 
             return null;
         }

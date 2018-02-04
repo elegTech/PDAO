@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -22,7 +23,7 @@ namespace P_DAO.BusnessLogics
     class Utilities
     {
         // Load XML a file.
-        public static XmlDocument LoadXMLFile(string xmlPath)
+        public static XDocument LoadXMLFile(string xmlPath)
         {
             if (String.IsNullOrWhiteSpace(xmlPath))
                 return null;
@@ -30,11 +31,11 @@ namespace P_DAO.BusnessLogics
             if (!File.Exists(xmlPath))
                 return null;
 
-            XmlDocument xmlDoc = new XmlDocument();
+            XDocument xmlDoc = null;
             
             try
             {
-                xmlDoc.Load(xmlPath);
+                xmlDoc = XDocument.Load(xmlPath);
             }
             catch
             {

@@ -33,12 +33,12 @@ C:\CodeProjects\P-DAO\P-DAO\obj\Debug\PDAO.exe.licenses
 C:\CodeProjects\P-DAO\P-DAO\obj\Debug\PDAO.exe
 C:\CodeProjects\P-DAO\P-DAO\obj\Debug\PDAO.pdb
 C:\MyProjects\PDAO\P-DAO\bin\Debug\PDAO.exe.config
-C:\MyProjects\PDAO\P-DAO\obj\Debug\PDAO.exe
-C:\MyProjects\PDAO\P-DAO\obj\Debug\PDAO.pdb
 C:\MyProjects\PDAO\P-DAO\bin\Debug\PDAO.exe
 C:\MyProjects\PDAO\P-DAO\bin\Debug\PDAO.pdb
 C:\MyProjects\PDAO\P-DAO\bin\Debug\DevExpress.Images.v14.1.dll
+C:\MyProjects\PDAO\P-DAO\bin\Debug\MathNet.Numerics.dll
 C:\MyProjects\PDAO\P-DAO\bin\Debug\websocket-sharp.dll
+C:\MyProjects\PDAO\P-DAO\bin\Debug\MathNet.Numerics.xml
 C:\MyProjects\PDAO\P-DAO\bin\Debug\websocket-sharp.xml
 C:\MyProjects\PDAO\P-DAO\obj\Debug\MainWindow.baml
 C:\MyProjects\PDAO\P-DAO\obj\Debug\App.baml
@@ -49,4 +49,5 @@ C:\MyProjects\PDAO\P-DAO\obj\Debug\PDAO.g.resources
 C:\MyProjects\PDAO\P-DAO\obj\Debug\P_DAO.Properties.Resources.resources
 C:\MyProjects\PDAO\P-DAO\obj\Debug\P-DAO.csproj.GenerateResource.Cache
 C:\MyProjects\PDAO\P-DAO\obj\Debug\PDAO.exe.licenses
-C:\MyProjects\PDAO\P-DAO\obj\Debug\P-DAO.csprojResolveAssemblyReference.cache
+C:\MyProjects\PDAO\P-DAO\obj\Debug\PDAO.exe
+C:\MyProjects\PDAO\P-DAO\obj\Debug\PDAO.pdb
