@@ -88,7 +88,7 @@ namespace P_DAO.BusnessLogics
             int index = mProductInfoUIViewers.Items.IndexOf(panel);
             mProductInfoUIViewers.SelectedTabIndex = index;
 
-            ProductInformationViewer productInfoViewer = new ProductInformationViewer(panel);
+            ProductInformationViewer productInfoViewer = new ProductInformationViewer(panel, product);
 
             mProduct2ViewerDictionary.Add(product, productInfoViewer);
         }

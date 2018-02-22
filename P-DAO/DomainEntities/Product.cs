@@ -253,7 +253,7 @@ namespace P_DAO.DomainEntities
         }
 
 
-        // 获取具有制定产品名的
+        // 获取具有指定名称的产品
         public static Product GetProduct(string productName)
         {
             if (string.IsNullOrWhiteSpace(productName))
@@ -263,6 +263,50 @@ namespace P_DAO.DomainEntities
                                         StringComparison.CurrentCultureIgnoreCase));
         }
 
+
+        public DataTable GetSubProductInfo()
+        {
+            if (null == mProductXML.Element("Product"))
+                return null;
+
+            // 记录每个子产品输入输出参数的个数，取最大值;
+            int columnNumMax = 0;
+            foreach (Product prod in mChildProductList)
+            {
+                if (prod.mParameterList.Count > columnNumMax)
+                    columnNumMax = prod.mParameterList.Count;
+            }
+
+            if (columnNumMax == 0)
+                return null;
+
+            // 构建容纳子产品数据列表表格
+            DataTable subProductInfoTable = new DataTable();
+
+            DataColumn column = new DataColumn();
+            column.DataType = System.Type.GetType("System.String");
+            column.ColumnName = "Name";
+            column.AutoIncrement = false;
+            column.Caption = "Product Name";
+            column.ReadOnly = true;
+            column.Unique = false;
+            subProductInfoTable.Columns.Add(column);
+
+            for (int i = 0; i < columnNumMax; i++)
+            {
+                column = new DataColumn();
+                column.DataType = System.Type.GetType("System.String");
+                column.ColumnName = "Parameter" + i.ToString();
+                column.AutoIncrement = false;
+                column.Caption = "Product" + i.ToString();
+                column.ReadOnly = true;
+                column.Unique = false;
+                subProductInfoTable.Columns.Add(column);
+            }
+
+
+            return subProductInfoTable;
+        }
 
         #endregion
 

@@ -56,7 +56,11 @@ namespace P_DAO.UIController
                 return;
             }
             mProductData = product.ProductData;
-            mProductUIViewer.ItemsSource = mProductData;
+
+            // 在产品结构树中仅仅显示产品名, 其他信息略去;
+            DataTable productStructureTree = mProductData.DefaultView.ToTable(false, new string[] { "Name", "ID", "ParentID" });
+
+            mProductUIViewer.ItemsSource = productStructureTree;
             mProductUIViewer.RefreshData();
         }
 
