@@ -7,3 +7,5 @@ DevExpress.Xpf.Docking.DockLayoutManager, DevExpress.Xpf.Docking.v14.1, Version=
 DevExpress.Xpf.NavBar.NavBarControl, DevExpress.Xpf.NavBar.v14.1, Version=14.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a
 DevExpress.Xpf.Grid.GridControl, DevExpress.Xpf.Grid.v14.1, Version=14.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a
 DevExpress.Xpf.Grid.TreeListControl, DevExpress.Xpf.Grid.v14.1, Version=14.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a
+DevExpress.Xpf.Navigation.TileNavPane, DevExpress.Xpf.Controls.v14.1, Version=14.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a
+DevExpress.Xpf.LayoutControl.ScrollBox, DevExpress.Xpf.LayoutControl.v14.1, Version=14.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a

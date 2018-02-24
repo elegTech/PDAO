@@ -52,3 +52,7 @@ C:\MyProjects\PDAO\P-DAO\obj\Debug\PDAO.exe.licenses
 C:\MyProjects\PDAO\P-DAO\obj\Debug\PDAO.exe
 C:\MyProjects\PDAO\P-DAO\obj\Debug\PDAO.pdb
 C:\MyProjects\PDAO\P-DAO\obj\Debug\P-DAO.csprojResolveAssemblyReference.cache
+D:\Projects\WPF\P-DAO\P-DAO\bin\Debug\MathNet.Numerics.dll
+D:\Projects\WPF\P-DAO\P-DAO\bin\Debug\MathNet.Numerics.xml
+D:\Projects\WPF\P-DAO\P-DAO\obj\Debug\Window1.baml
+D:\Projects\WPF\P-DAO\P-DAO\obj\Debug\Window1.g.cs

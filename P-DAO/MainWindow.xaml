@@ -49,21 +49,37 @@
                     </dxr:RibbonStatusBarControl.RightItemLinks>
                 </dxr:RibbonStatusBarControl>
                 <Grid>
-                    <dxdo:DockLayoutManager x:Name="docLayoutManager">
-                        <dxdo:LayoutGroup>
-                            <dxdo:LayoutPanel Caption="ProductStructure" FloatOnDoubleClick="False">
-                                <dxg:TreeListControl x:Name="productStructureTree" AutoGenerateColumns="AddNew" EnableSmartColumnsGeneration="True">
-                                    <dxg:TreeListControl.View>
-                                        <dxg:TreeListView RowDoubleClick="structureView_RowDoubleClick"  x:Name="structureView" KeyFieldName="ID" ParentFieldName="ParentID" AllowPerPixelScrolling="True" ShowTotalSummary="True" AllowEditing="False" AutoWidth="True">
+                    <!--利用嵌套的DockLayoutManager控件实现多窗口布局, 其简单示例见Window1例子-->
+                    <dxdo:DockLayoutManager>
+                        <dxdo:LayoutGroup Caption="LayoutRoot" Orientation="Vertical">
+                            <dxdo:LayoutPanel Caption="Product" ItemHeight="1.65*">
 
-                                        </dxg:TreeListView>
-                                    </dxg:TreeListControl.View>
-                                </dxg:TreeListControl>
+                                <dxdo:DockLayoutManager x:Name="docLayoutManager">
+                                    <dxdo:LayoutGroup>
+                                        <dxdo:LayoutPanel Caption="ProductStructure" FloatOnDoubleClick="False">
+                                    <dxg:TreeListControl x:Name="productStructureTree" AutoGenerateColumns="AddNew" EnableSmartColumnsGeneration="True">
+                                        <dxg:TreeListControl.View>
+                                            <dxg:TreeListView RowDoubleClick="structureView_RowDoubleClick"  x:Name="structureView" KeyFieldName="ID" ParentFieldName="ParentID" AllowPerPixelScrolling="True" ShowTotalSummary="True" AllowEditing="False" AutoWidth="True">
+
+                                            </dxg:TreeListView>
+                                        </dxg:TreeListControl.View>
+                                    </dxg:TreeListControl>
+                                </dxdo:LayoutPanel>
+                                        <dxdo:DocumentGroup x:Name="ProductGroup" FloatOnDoubleClick="False" GroupBorderStyle="Tabbed"/>
+                                    </dxdo:LayoutGroup>                                                                                
+                                </dxdo:DockLayoutManager>
+
                             </dxdo:LayoutPanel>
-                            <dxdo:DocumentGroup x:Name="ProductGroup" FloatOnDoubleClick="False" GroupBorderStyle="Tabbed"/>
+                            
+                            <dxdo:DocumentGroup x:Name="AnalysisResultGroup" FloatOnDoubleClick="False" GroupBorderStyle="Tabbed" ItemHeight="0.35*"/>
                         </dxdo:LayoutGroup>
                     </dxdo:DockLayoutManager>
+
+
+
+
                 </Grid>
+
             </DockPanel>
         </dxb:BarManager>
 

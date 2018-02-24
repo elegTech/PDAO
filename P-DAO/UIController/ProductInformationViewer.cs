@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-
+using System.Windows.Media;
 
 using DevExpress.Xpf.Docking;
 using DevExpress.Xpf.Grid;
@@ -38,6 +38,8 @@ namespace P_DAO.UIController
 
         private Product mProduct;
 
+
+        // 仅作为编码示例
         public ProductInformationViewer(DocumentPanel uiViewer)
         {
             mUIViewer = uiViewer;
@@ -72,8 +74,6 @@ namespace P_DAO.UIController
 
 
             mUIViewer.Content = mUIGrid;
-
-
         }
 
 
@@ -84,22 +84,18 @@ namespace P_DAO.UIController
             mProduct = product;
 
             mUIGrid = new Grid();
-
-            mProductInfoViewer = new GridControl();
             
+            mProductInfoViewer = new GridControl();
             mProductInfoViewer.AutoGenerateColumns = AutoGenerateColumnsMode.AddNew;
-
+            
             // 设置数据来源;
             mProductInfoViewer.ItemsSource = Stuff.GetStuff();
-
             GridViewBase view = (GridViewBase)mProductInfoViewer.View;
-
             // 隐藏列排序设置面板, 用户可通过右键菜单显示;
             view.ShowGroupPanel = false;
 
+
             mUIGrid.Children.Add(mProductInfoViewer);
-
-
 
             mUIViewer.Content = mUIGrid;
 

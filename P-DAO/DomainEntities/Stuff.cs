@@ -10,7 +10,7 @@ namespace P_DAO.DomainEntities
         public static List<Employee> GetStuff() {
 
         List<Employee> stuff = new List<Employee>();
-        stuff.Add(new Employee() { ID = 1, ParentID = 0, Name = "Gregory S. Price", Department = "", Position = "President" });
+        stuff.Add(new Employee() { ID = 1, ParentID = 0, Name = "Gregory S. Price", Department = ""});
         stuff.Add(new Employee() { ID = 2, ParentID = 1, Name = "Irma R. Marshall", Department = "Marketing", Position = "Vice President" });
         stuff.Add(new Employee() { ID = 3, ParentID = 1, Name = "John C. Powell", Department = "Operations", Position = "Vice President" });
         stuff.Add(new Employee() { ID = 4, ParentID = 1, Name = "Christian P. Laclair", Department = "Production", Position = "Vice President" });

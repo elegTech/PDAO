@@ -304,6 +304,12 @@ namespace P_DAO.DomainEntities
                 subProductInfoTable.Columns.Add(column);
             }
 
+            
+
+
+
+
+
 
             return subProductInfoTable;
         }
