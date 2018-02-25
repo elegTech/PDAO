@@ -266,19 +266,26 @@ namespace P_DAO.DomainEntities
 
         public DataTable GetSubProductInfo()
         {
-            if (null == mProductXML.Element("Product"))
-                return null;
 
             // 记录每个子产品输入输出参数的个数，取最大值;
-            int columnNumMax = 0;
+            int inputParamNumMax = mParameterList.FindAll(par => par.name.StartsWith("Input_",
+                    StringComparison.CurrentCultureIgnoreCase)).Count;
+
+            int outputParamNumMax = mParameterList.Count - inputParamNumMax;
+
             foreach (Product prod in mChildProductList)
             {
-                if (prod.mParameterList.Count > columnNumMax)
-                    columnNumMax = prod.mParameterList.Count;
-            }
+                int inputParNum = prod.mParameterList.FindAll(par => par.name.StartsWith("Input_",
+                    StringComparison.CurrentCultureIgnoreCase)).Count;
 
-            if (columnNumMax == 0)
-                return null;
+                int onputParNum = prod.mParameterList.Count - inputParNum;
+
+                if (inputParNum > inputParamNumMax)
+                    inputParamNumMax = inputParNum;
+
+                if (onputParNum > outputParamNumMax)
+                    outputParamNumMax = onputParNum;
+            }
 
             // 构建容纳子产品数据列表表格
             DataTable subProductInfoTable = new DataTable();
@@ -292,23 +299,57 @@ namespace P_DAO.DomainEntities
             column.Unique = false;
             subProductInfoTable.Columns.Add(column);
 
-            for (int i = 0; i < columnNumMax; i++)
+            for (int i = 1; i <= inputParamNumMax; i++)
             {
                 column = new DataColumn();
                 column.DataType = System.Type.GetType("System.String");
-                column.ColumnName = "Parameter" + i.ToString();
+                column.ColumnName = "Input_" + i.ToString();
                 column.AutoIncrement = false;
-                column.Caption = "Product" + i.ToString();
+                column.Caption = "Input_" + i.ToString();
+                column.ReadOnly = true;
+                column.Unique = false;
+                subProductInfoTable.Columns.Add(column);
+            }
+
+            for (int i = 1; i <= outputParamNumMax; i++)
+            {
+                column = new DataColumn();
+                column.DataType = System.Type.GetType("System.String");
+                column.ColumnName = "Output_" + i.ToString();
+                column.AutoIncrement = false;
+                column.Caption = "Output_" + i.ToString();
                 column.ReadOnly = true;
                 column.Unique = false;
                 subProductInfoTable.Columns.Add(column);
             }
 
             
+            DataRow row;
+
+            // 将当前产品信息放入表中;
+            row = subProductInfoTable.NewRow();
+            row["Name"] = Name;
+
+            foreach (ProductParameter par in mParameterList)
+            {
+                row[par.name] = par.minValue.ToString() + "," + par.maxValue.ToString();
+            }
+
+            subProductInfoTable.Rows.Add(row);
 
 
+            foreach (Product child in mChildProductList)
+            {
+                row = subProductInfoTable.NewRow();
+                row["Name"] = child.Name;
 
+                foreach (ProductParameter par in child.ParameterList)
+                {
+                    row[par.name] = par.minValue.ToString() + "," + par.maxValue.ToString();
+                }
 
+                subProductInfoTable.Rows.Add(row);
+            }
 
 
             return subProductInfoTable;

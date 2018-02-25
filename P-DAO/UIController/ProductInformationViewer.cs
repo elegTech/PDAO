@@ -89,7 +89,10 @@ namespace P_DAO.UIController
             mProductInfoViewer.AutoGenerateColumns = AutoGenerateColumnsMode.AddNew;
             
             // 设置数据来源;
-            mProductInfoViewer.ItemsSource = Stuff.GetStuff();
+            //mProductInfoViewer.ItemsSource = Stuff.GetStuff();
+
+            mProductInfoViewer.ItemsSource = product.GetSubProductInfo();
+           
             GridViewBase view = (GridViewBase)mProductInfoViewer.View;
             // 隐藏列排序设置面板, 用户可通过右键菜单显示;
             view.ShowGroupPanel = false;
