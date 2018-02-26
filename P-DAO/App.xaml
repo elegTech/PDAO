@@ -26,6 +26,8 @@
                 </Trigger>
                 <Trigger Property="SelectionState" Value="FocusedAndSelected">
                     <Setter Property="Background" Value="Orange"/>
+                    <Setter Property="Foreground" Value="Blue"/>
+                    <Setter Property="TextBlock.FontWeight" Value="Bold"/>
                     <!--Setter Property="TextBlock.Foreground" Value="OrangeRed"/-->
                 </Trigger>
             </Style.Triggers>

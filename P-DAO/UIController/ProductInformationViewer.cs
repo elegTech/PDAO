@@ -116,12 +116,6 @@ namespace P_DAO.UIController
             mProductInfoViewer.SelectionMode = MultiSelectMode.Cell;
 
             view.NavigationStyle = GridViewNavigationStyle.Cell;
-
-            view.SelectCell(0, mProductInfoViewer.Columns[0]);
-            view.SelectCell(0, mProductInfoViewer.Columns[1]);
-            view.SelectCell(0, mProductInfoViewer.Columns[2]);
-
-
         }
 
 
