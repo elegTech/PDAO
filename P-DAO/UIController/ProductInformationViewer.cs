@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows;
 
 using DevExpress.Xpf.Docking;
 using DevExpress.Xpf.Grid;
@@ -89,18 +90,36 @@ namespace P_DAO.UIController
             mProductInfoViewer.AutoGenerateColumns = AutoGenerateColumnsMode.AddNew;
             
             // 设置数据来源;
-            //mProductInfoViewer.ItemsSource = Stuff.GetStuff();
-
             mProductInfoViewer.ItemsSource = product.GetSubProductInfo();
-           
-            GridViewBase view = (GridViewBase)mProductInfoViewer.View;
+
+            // 设置表格视图显示属性;
+            TableView view = (TableView)mProductInfoViewer.View;
             // 隐藏列排序设置面板, 用户可通过右键菜单显示;
             view.ShowGroupPanel = false;
 
+            view.AllowEditing = false;
+
+            view.CellStyle = (Style)Application.Current.Resources["SelectionStateCellStyle"];
+            
+            view.RowStyle = (Style)Application.Current.Resources["FocusedRowStyle"];
+
+            view.UseIndicatorForSelection = true;
 
             mUIGrid.Children.Add(mProductInfoViewer);
 
             mUIViewer.Content = mUIGrid;
+
+            view.UseLightweightTemplates = UseLightweightTemplates.All;
+
+            DataControlBase baseViewer = (DataControlBase) mProductInfoViewer;
+
+            mProductInfoViewer.SelectionMode = MultiSelectMode.Cell;
+
+            view.NavigationStyle = GridViewNavigationStyle.Cell;
+
+            view.SelectCell(0, mProductInfoViewer.Columns[0]);
+            view.SelectCell(0, mProductInfoViewer.Columns[1]);
+            view.SelectCell(0, mProductInfoViewer.Columns[2]);
 
 
         }
