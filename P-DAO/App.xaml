@@ -20,12 +20,16 @@
             <Style.Triggers>
                 <Trigger Property="SelectionState" Value="Selected">
                     <Setter Property="Background" Value="Red"/>
+                    <Setter Property="TextBlock.FontWeight" Value="Bold"/>
+
                 </Trigger>
                 <Trigger Property="SelectionState" Value="Focused">
                     <Setter Property="Background" Value="Green"/>
                 </Trigger>
                 <Trigger Property="SelectionState" Value="FocusedAndSelected">
                     <Setter Property="Background" Value="Orange"/>
+                    <Setter Property="TextBlock.FontWeight" Value="Bold"/>
+
                     <!--Setter Property="TextBlock.Foreground" Value="OrangeRed"/-->
                 </Trigger>
             </Style.Triggers>
@@ -57,9 +61,23 @@
         </Style>
 
 
-        
-        
-        
+        <Style x:Key="SelectedRowStyle" TargetType="{x:Type dxg:RowControl}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=IsSelected}" Value="True">
+                    <Setter Property="Background" Value="Gray" />
+                    <Setter Property="Foreground" Value="White" />
+                </DataTrigger>
+                <!--Trigger Property="dxg:GridViewBase.IsFocusedRow" Value="True"-->
+                    <!-- Setter Property="Background" Value="Red" /-->
+                    <!--Setter Property="Foreground" Value="White" /-->
+                <!-- Setter Property="Background" Value="Gray" /-->
+                <!-- Setter Property="Foreground" Value="Black" /-->
+                <!--/Trigger-->
+            </Style.Triggers>
+        </Style>
+
+
+
 
     </Application.Resources>
 </Application>

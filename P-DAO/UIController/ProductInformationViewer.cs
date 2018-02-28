@@ -101,7 +101,7 @@ namespace P_DAO.UIController
 
             view.CellStyle = (Style)Application.Current.Resources["SelectionStateCellStyle"];
             
-            view.RowStyle = (Style)Application.Current.Resources["FocusedRowStyle"];
+            view.RowStyle = (Style)Application.Current.Resources["SelectedRowStyle"];
 
             view.UseIndicatorForSelection = true;
 
@@ -117,9 +117,50 @@ namespace P_DAO.UIController
 
             view.NavigationStyle = GridViewNavigationStyle.Cell;
 
+            mProductInfoViewer.CurrentColumnChanged += CurrentColumnChanged;
+            mProductInfoViewer.CurrentItemChanged += CurrentItemChanged;
+
+            //mProductInfoViewer.SelectItem(1);
+            //mProductInfoViewer.SelectItem(0);
+
             view.SelectCell(0, mProductInfoViewer.Columns[0]);
-            view.SelectCell(0, mProductInfoViewer.Columns[1]);
-            view.SelectCell(0, mProductInfoViewer.Columns[2]);
+           // view.SelectCell(0, mProductInfoViewer.Columns[1]);
+           // view.SelectCell(0, mProductInfoViewer.Columns[2]);
+
+
+        }
+
+        void CurrentItemChanged(object sender, CurrentItemChangedEventArgs e)
+        {
+            GridColumn focusedColumn = (GridColumn)e.Source.CurrentColumn;
+
+            TableView view = (TableView) mProductInfoViewer.View;
+
+            mProductInfoViewer.GetCellValue(view.FocusedRowHandle, focusedColumn);
+
+            //view.SelectCell(view.FocusedRowHandle, focusedColumn);
+
+            //MessageBox.Show("Row");
+
+
+            mProductInfoViewer.GetFocusedValue();
+        }
+
+        void CurrentColumnChanged(object sender, CurrentColumnChangedEventArgs e)
+        {
+            
+            GridColumn focusedColumn = (GridColumn)e.NewColumn;
+
+            TableView view = (TableView)mProductInfoViewer.View;
+
+            mProductInfoViewer.GetCellValue(view.FocusedRowHandle, focusedColumn);
+
+
+            //view.SelectCell(view.FocusedRowHandle, focusedColumn);
+
+            //MessageBox.Show("Column");
+
+            mProductInfoViewer.GetFocusedValue();
 
 
         }
