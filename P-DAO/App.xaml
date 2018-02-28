@@ -28,13 +28,13 @@
                 </Trigger>
                 <Trigger Property="SelectionState" Value="FocusedAndSelected">
                     <Setter Property="Background" Value="Orange"/>
-<<<<<<< HEAD
+
                     <Setter Property="TextBlock.FontWeight" Value="Bold"/>
 
-=======
+
                     <Setter Property="Foreground" Value="Blue"/>
                     <Setter Property="TextBlock.FontWeight" Value="Bold"/>
->>>>>>> 547b9f64ca21467bc61d47a1d603e73bc87e4c25
+
                     <!--Setter Property="TextBlock.Foreground" Value="OrangeRed"/-->
                 </Trigger>
             </Style.Triggers>
