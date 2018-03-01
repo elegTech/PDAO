@@ -351,9 +351,62 @@ namespace P_DAO.DomainEntities
                 subProductInfoTable.Rows.Add(row);
             }
 
-
             return subProductInfoTable;
         }
+
+
+        public void FindNeighborParameter(string sourceParameterName, ref Product targetProduct, ref string targetParameterName)
+        {
+            if (string.IsNullOrWhiteSpace(sourceParameterName))
+                return;
+
+            ProductDependency? productDep = null;
+            ProductParameter? productPar = null;
+
+            // 若当前选中参数为输出参数, 查找是否有其他
+            if (sourceParameterName.StartsWith("Output_"))
+            {
+                productDep = this.mDependencyList.Find(dep => dep.sourceParameter.name.Equals(sourceParameterName, StringComparison.CurrentCultureIgnoreCase));
+
+                // 该参数为父产品的输出参数, 无其他同级产品的输入参数依赖该参数;
+                // 此时输出父产品及其输出参数;
+                if (null == productDep || null == productDep.Value.targetProduct)
+                {
+                    targetProduct = ParentProduct;
+                    productPar = ParentProduct.mParameterList.Find(par => par.name.Equals(sourceParameterName, StringComparison.CurrentCultureIgnoreCase));
+                    targetParameterName = productPar.Value.name;
+                }
+
+                else
+                {
+                    targetProduct = productDep.Value.targetProduct;
+                    targetParameterName = productDep.Value.targetParameter.name;
+                }
+                return;
+            }
+
+            // 若为输入参数, 则需找到所依赖的另一输出参数
+            else
+            {
+                foreach (Product childProd in this.ParentProduct.mChildProductList)
+                {
+                    productDep = childProd.mDependencyList.Find(dep => dep.targetProduct == this &&
+                                                                dep.targetParameter.name.Equals(sourceParameterName, StringComparison.CurrentCultureIgnoreCase));
+                    
+                    // 该输入参数所依赖的另一产品及输出参数已找到;
+                    if (null != productDep && null != productDep.Value.targetProduct)
+                        break;                    
+                }
+            }
+
+        
+        }
+
+
+
+
+
+
 
         #endregion
 
