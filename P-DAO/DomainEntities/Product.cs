@@ -30,11 +30,31 @@ namespace P_DAO.DomainEntities
             this.name = name;
             this.minValue = minValue;
             this.maxValue = maxValue;
+
+            childProductName = string.Empty;
+            childProductParameterName = string.Empty;
+        }
+
+        // 对于包含子产品的父产品, 其输入输出参数均由子产品的参数来表示;
+        public ProductParameter(string name, string childProdName, string childProdParameterName)
+        {
+            this.name = name;
+            this.childProductName = childProdName;
+            this.childProductParameterName = childProdParameterName;
+
+            minValue = double.NaN;
+            maxValue = double.NaN;
         }
 
         public string name;
         public double minValue;
         public double maxValue;
+
+        // 对任意父产品而言, 其输入/输出参数均为某子产品的
+        // 输入/输出参数, 需记录相应的产品名和参数名;
+        public string childProductName;
+        
+        public string childProductParameterName;
     }
 
     struct ProductDependency
@@ -127,18 +147,26 @@ namespace P_DAO.DomainEntities
         {
             mParameterList = new List<ProductParameter>();
 
-            List<XAttribute> attrList = productXmlElement.Attributes().ToList();
-
-            foreach (XAttribute attr in attrList)
+            // 说明该产品不包含下一级子产品;
+            if (null != productXmlElement.Element("Product"))
             {
-                if(attr.Name.LocalName.Contains("Input") || 
-                   attr.Name.LocalName.Contains("Output"))
+                List<XAttribute> attrList = productXmlElement.Attributes().ToList();
+                foreach (XAttribute attr in attrList)
                 {
-                    string[] values = attr.Value.Split(',');
-                    ProductParameter par = new ProductParameter(attr.Name.LocalName, 
-                                                Double.Parse(values[0]), Double.Parse(values[1]));
-                    mParameterList.Add(par);
-                }                    
+                    if (attr.Name.LocalName.Contains("Input") ||
+                       attr.Name.LocalName.Contains("Output"))
+                    {
+                        string[] values = attr.Value.Split(',');
+                        ProductParameter par = new ProductParameter(attr.Name.LocalName,
+                                                    Double.Parse(values[0]), Double.Parse(values[1]));
+                        mParameterList.Add(par);
+                    }
+                }
+            }
+            // 
+            else
+            { 
+                   
             }
 
             mID = productXmlElement.Attribute("ID").Value;
@@ -147,12 +175,15 @@ namespace P_DAO.DomainEntities
             mParentProduct = parent;
             mDependencyList = new List<ProductDependency>();
             mProductXML = productXmlElement;
-            mDataTable = GenerateData();
+
             mChildProductList = new List<Product>();
             mProductName = mProductXML.Attribute("Name").Value;
+            productList.Add(this);
+
+            // 
+            mDataTable = GenerateData();
             GenerateProductTree(this);
 
-            productList.Add(this);
         }
                 
         #endregion
@@ -353,6 +384,20 @@ namespace P_DAO.DomainEntities
 
             return subProductInfoTable;
         }
+
+        // 利用子产品的参数取值区间为父产品参数区间赋值;
+        public void FillParameters()
+        {
+            if (this.mChildProductList.Count > 0)
+            { 
+                    
+
+            }
+            
+        }
+
+
+
 
 
         public void FindNeighborParameter(string sourceParameterName, ref Product targetProduct, ref string targetParameterName)
