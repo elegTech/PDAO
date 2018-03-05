@@ -162,6 +162,25 @@ namespace P_DAO.UIController
 
             mProductInfoViewer.GetFocusedValue();
 
+            
+        }
+
+
+        public void GetFocusedProductParameter(string productName, string parameterName)
+        {
+            if (string.IsNullOrWhiteSpace(productName) || string.IsNullOrWhiteSpace(parameterName))
+                return;
+
+            Product neighborProduct = null;
+            string neighborPar = string.Empty;
+
+            Product focusedProduct = Product.GetProduct(productName);
+            focusedProduct.FindNeighborParameter(parameterName, ref neighborProduct, ref neighborPar);
+
+            TableView view = (TableView)mProductInfoViewer.View;
+
+            int rowHandle = mProductInfoViewer.FindRowByValue("Name", focusedProduct.Name)
+            view.SelectCell(, mProductInfoViewer.Columns[neighborPar]);
 
         }
 

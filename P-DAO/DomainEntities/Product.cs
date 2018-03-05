@@ -59,6 +59,7 @@ namespace P_DAO.DomainEntities
 
     struct ProductDependency
     {
+        public Product sourceProduct;
         public ProductParameter sourceParameter;
 
         public Product targetProduct;
@@ -147,28 +148,19 @@ namespace P_DAO.DomainEntities
         {
             mParameterList = new List<ProductParameter>();
 
-            // 说明该产品不包含下一级子产品;
-            if (null != productXmlElement.Element("Product"))
+            List<XAttribute> attrList = productXmlElement.Attributes().ToList();
+            foreach (XAttribute attr in attrList)
             {
-                List<XAttribute> attrList = productXmlElement.Attributes().ToList();
-                foreach (XAttribute attr in attrList)
+                if (attr.Name.LocalName.Contains("Input") ||
+                    attr.Name.LocalName.Contains("Output"))
                 {
-                    if (attr.Name.LocalName.Contains("Input") ||
-                       attr.Name.LocalName.Contains("Output"))
-                    {
-                        string[] values = attr.Value.Split(',');
-                        ProductParameter par = new ProductParameter(attr.Name.LocalName,
-                                                    Double.Parse(values[0]), Double.Parse(values[1]));
-                        mParameterList.Add(par);
-                    }
+                    string[] values = attr.Value.Split(',');
+                    ProductParameter par = new ProductParameter(attr.Name.LocalName,
+                                                Double.Parse(values[0]), Double.Parse(values[1]));
+                    mParameterList.Add(par);
                 }
             }
-            // 
-            else
-            { 
-                   
-            }
-
+            
             mID = productXmlElement.Attribute("ID").Value;
             mParentID = productXmlElement.Attribute("ParentID").Value;
 
@@ -179,8 +171,7 @@ namespace P_DAO.DomainEntities
             mChildProductList = new List<Product>();
             mProductName = mProductXML.Attribute("Name").Value;
             productList.Add(this);
-
-            // 
+            
             mDataTable = GenerateData();
             GenerateProductTree(this);
 
@@ -248,14 +239,22 @@ namespace P_DAO.DomainEntities
             foreach (XElement dependencyElmt in dependencyList)
             {
                 ProductDependency prodDep = new ProductDependency();
-                prodDep.targetProduct = this.ParentProduct.mChildProductList.Find(prod => string.Equals(prod.ID, 
+
+                if (dependencyElmt.Attribute("SourceProduct").Value.Equals(this.ID))
+                    prodDep.sourceProduct = this;
+                else
+                    prodDep.sourceProduct = mChildProductList.Find(prod => string.Equals(prod.ID,
+                                                            dependencyElmt.Attribute("ID").Value,
+                                                            StringComparison.CurrentCultureIgnoreCase));
+      
+                prodDep.targetProduct = mChildProductList.Find(prod => string.Equals(prod.ID, 
                                                             dependencyElmt.Attribute("ID").Value,
                                                             StringComparison.CurrentCultureIgnoreCase));
 
                 prodDep.targetParameter = prodDep.targetProduct.ParameterList.Find(par => string.Equals(par.name,
                                                                                     dependencyElmt.Attribute("TargetPar").Value,
                                                                                     StringComparison.CurrentCultureIgnoreCase));
-                prodDep.sourceParameter = this.ParameterList.Find(par => string.Equals(par.name,
+                prodDep.sourceParameter = prodDep.sourceProduct.ParameterList.Find(par => string.Equals(par.name,
                                                                                     dependencyElmt.Attribute("SourcePar").Value,
                                                                                     StringComparison.CurrentCultureIgnoreCase));
                 this.mDependencyList.Add(prodDep);                
@@ -385,20 +384,6 @@ namespace P_DAO.DomainEntities
             return subProductInfoTable;
         }
 
-        // 利用子产品的参数取值区间为父产品参数区间赋值;
-        public void FillParameters()
-        {
-            if (this.mChildProductList.Count > 0)
-            { 
-                    
-
-            }
-            
-        }
-
-
-
-
 
         public void FindNeighborParameter(string sourceParameterName, ref Product targetProduct, ref string targetParameterName)
         {
@@ -406,53 +391,32 @@ namespace P_DAO.DomainEntities
                 return;
 
             ProductDependency? productDep = null;
-            ProductParameter? productPar = null;
 
-            // 若当前选中参数为输出参数, 查找是否有其他
-            if (sourceParameterName.StartsWith("Output_"))
+            // 在父产品的依赖列表中找依赖产品及参数;
+            productDep = ParentProduct.mDependencyList.Find(dep => dep.sourceProduct == this &&
+                                                    dep.sourceParameter.name.Equals(sourceParameterName,
+                                                    StringComparison.CurrentCultureIgnoreCase));
+
+            if (!productDep.HasValue)
             {
-                productDep = this.mDependencyList.Find(dep => dep.sourceParameter.name.Equals(sourceParameterName, StringComparison.CurrentCultureIgnoreCase));
-
-                // 该参数为父产品的输出参数, 无其他同级产品的输入参数依赖该参数;
-                // 此时输出父产品及其输出参数;
-                if (null == productDep || null == productDep.Value.targetProduct)
-                {
-                    targetProduct = ParentProduct;
-                    productPar = ParentProduct.mParameterList.Find(par => par.name.Equals(sourceParameterName, StringComparison.CurrentCultureIgnoreCase));
-                    targetParameterName = productPar.Value.name;
-                }
-
-                else
-                {
-                    targetProduct = productDep.Value.targetProduct;
-                    targetParameterName = productDep.Value.targetParameter.name;
-                }
-                return;
+                productDep = ParentProduct.mDependencyList.Find(dep => dep.targetProduct == this &&
+                                    dep.targetParameter.name.Equals(sourceParameterName,
+                                    StringComparison.CurrentCultureIgnoreCase));
             }
 
-            // 若为输入参数, 则需找到所依赖的另一输出参数
+            if (productDep.Value.sourceProduct == this)
+            {
+                targetProduct = productDep.Value.targetProduct;
+                targetParameterName = productDep.Value.targetParameter.name;
+            }
             else
             {
-                foreach (Product childProd in this.ParentProduct.mChildProductList)
-                {
-                    productDep = childProd.mDependencyList.Find(dep => dep.targetProduct == this &&
-                                                                dep.targetParameter.name.Equals(sourceParameterName, StringComparison.CurrentCultureIgnoreCase));
-                    
-                    // 该输入参数所依赖的另一产品及输出参数已找到;
-                    if (null != productDep && null != productDep.Value.targetProduct)
-                        break;                    
-                }
+                targetProduct = productDep.Value.sourceProduct;
+                targetParameterName = productDep.Value.sourceParameter.name;
             }
-
-        
+            
         }
-
-
-
-
-
-
-
+        
         #endregion
 
     }
