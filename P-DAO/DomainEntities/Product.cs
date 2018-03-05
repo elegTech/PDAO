@@ -240,17 +240,22 @@ namespace P_DAO.DomainEntities
             {
                 ProductDependency prodDep = new ProductDependency();
 
-                if (dependencyElmt.Attribute("SourceProduct").Value.Equals(this.ID))
+                // 依赖的源产品为当前节点产品或某一子产品
+                if (dependencyElmt.Attribute("SourceProduct").Value == this.ID)
                     prodDep.sourceProduct = this;
                 else
                     prodDep.sourceProduct = mChildProductList.Find(prod => string.Equals(prod.ID,
-                                                            dependencyElmt.Attribute("ID").Value,
+                                                       dependencyElmt.Attribute("SourceProduct").Value,
+                                                       StringComparison.CurrentCultureIgnoreCase));
+                
+                // 依赖的目标产品为当前节点产品或某一子产品
+                if (dependencyElmt.Attribute("TargetProduct").Value == this.ID)
+                    prodDep.targetProduct = this;
+                else
+                    prodDep.targetProduct = mChildProductList.Find(prod => string.Equals(prod.ID,
+                                                            dependencyElmt.Attribute("TargetProduct").Value,
                                                             StringComparison.CurrentCultureIgnoreCase));
-      
-                prodDep.targetProduct = mChildProductList.Find(prod => string.Equals(prod.ID, 
-                                                            dependencyElmt.Attribute("ID").Value,
-                                                            StringComparison.CurrentCultureIgnoreCase));
-
+               
                 prodDep.targetParameter = prodDep.targetProduct.ParameterList.Find(par => string.Equals(par.name,
                                                                                     dependencyElmt.Attribute("TargetPar").Value,
                                                                                     StringComparison.CurrentCultureIgnoreCase));

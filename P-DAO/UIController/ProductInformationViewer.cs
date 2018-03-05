@@ -134,39 +134,33 @@ namespace P_DAO.UIController
         {
             GridColumn focusedColumn = (GridColumn)e.Source.CurrentColumn;
 
-            TableView view = (TableView) mProductInfoViewer.View;
+            string culumnCaption = focusedColumn.HeaderCaption.ToString();
 
-            mProductInfoViewer.GetCellValue(view.FocusedRowHandle, focusedColumn);
+            if (culumnCaption == "Name")
+                return;
 
-            //view.SelectCell(view.FocusedRowHandle, focusedColumn);
+            string productName = mProductInfoViewer.GetFocusedRowCellDisplayText("Name");
 
-            //MessageBox.Show("Row");
-
-
-            mProductInfoViewer.GetFocusedValue();
+            SelectNeighborProduct(productName, culumnCaption);
         }
 
         void CurrentColumnChanged(object sender, CurrentColumnChangedEventArgs e)
-        {
-            
+        { 
             GridColumn focusedColumn = (GridColumn)e.NewColumn;
 
-            TableView view = (TableView)mProductInfoViewer.View;
+            string culumnCaption = focusedColumn.HeaderCaption.ToString();
 
-            mProductInfoViewer.GetCellValue(view.FocusedRowHandle, focusedColumn);
+            if (culumnCaption == "Name")
+                return;
 
+            string productName = mProductInfoViewer.GetFocusedRowCellDisplayText("Name");
 
-            //view.SelectCell(view.FocusedRowHandle, focusedColumn);
-
-            //MessageBox.Show("Column");
-
-            mProductInfoViewer.GetFocusedValue();
-
+            SelectNeighborProduct(productName, culumnCaption);
             
         }
 
 
-        public void GetFocusedProductParameter(string productName, string parameterName)
+        public void SelectNeighborProduct(string productName, string parameterName)
         {
             if (string.IsNullOrWhiteSpace(productName) || string.IsNullOrWhiteSpace(parameterName))
                 return;
@@ -179,8 +173,8 @@ namespace P_DAO.UIController
 
             TableView view = (TableView)mProductInfoViewer.View;
 
-            int rowHandle = mProductInfoViewer.FindRowByValue("Name", focusedProduct.Name)
-            view.SelectCell(, mProductInfoViewer.Columns[neighborPar]);
+            int rowHandle = mProductInfoViewer.FindRowByValue("Name", focusedProduct.Name);
+            view.SelectCell(rowHandle, mProductInfoViewer.Columns[neighborPar]);
 
         }
 
