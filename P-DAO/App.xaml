@@ -67,7 +67,7 @@
         </Style>
 
 
-        <Style x:Key="FocusedCellStyle1" TargetType="dxg:LightweightCellEditor">
+        <Style x:Key="FocusedCellStyle1" TargetType="dxg:LightweightCellEditor" BasedOn="{StaticResource ResourceKey={dxgt:GridRowThemeKey ResourceKey=LightweightCellStyle}}">
             <Style.Triggers>
                 <Trigger Property="dxg:DataViewBase.IsFocusedCell" Value="True">
                     <Setter Property="Background" Value="White" />
@@ -112,10 +112,10 @@
         <Style x:Key="SelectedRowStyle1" TargetType="{x:Type dxg:RowControl}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Path=IsSelected}" Value="True">
-                    <Setter Property="Background" Value="White" />
+                    <Setter Property="Background" Value="Gray" />
                 </DataTrigger>
                 <Trigger Property="dxg:GridViewBase.IsFocusedRow" Value="True">
-                    <Setter Property="Background" Value="White" />
+                    <Setter Property="Background" Value="SteelBlue" />
                 </Trigger>
             </Style.Triggers>
         </Style>

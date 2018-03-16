@@ -121,7 +121,7 @@ namespace P_DAO.UIController
 
             view.RowStyle = (Style)Application.Current.Resources["SelectedRowStyle1"];
 
-            view.Style = (Style)Application.Current.Resources["ViewStyle"];
+            //view.Style = (Style)Application.Current.Resources["ViewStyle"];
 
             view.ShowFocusedRectangle = true;
 
@@ -161,19 +161,34 @@ namespace P_DAO.UIController
             // 若选中的是位于产品名字栏的Cell，则退出;
             if (culumnCaption == "Name")
             {
+
+                if (!string.IsNullOrEmpty(mPreProductName))
+                {
+                    mPreProductName = "";
+                }
+
+                if (!string.IsNullOrEmpty(mPreParameterName))
+                {
+                    mPreParameterName = ""; 
+                }
                 if (null != mPreFocusedCell)
                 {
-                    mPreFocusedCell.Background = null;
-                    mPreFocusedCell.Foreground = Brushes.Black;
+                    //mPreFocusedCell.Background = Brushes.White;
+                    //mPreFocusedCell.Foreground = Brushes.Black;
 
-                    InplaceBaseEdit cellEditor = (InplaceBaseEdit)mPreFocusedCell.Content;
-                    cellEditor.FontWeight = FontWeights.Normal;
+                    //InplaceBaseEdit cellEditor = (InplaceBaseEdit)mPreFocusedCell.Content;
+                    //cellEditor.FontWeight = FontWeights.Normal;
+
+                    RestoreAppreance(mPreFocusedCell);
+                    mPreFocusedCell = null;
                 }
 
                 if (null != mPreSelectedCell)
                 {
-                    mPreSelectedCell.Background = null;
-                    mPreSelectedCell.Foreground = Brushes.Black;
+                    //mPreSelectedCell.Background = Brushes.White;
+                    //mPreSelectedCell.Foreground = Brushes.Black;
+                    RestoreAppreance(mPreSelectedCell);
+                    mPreSelectedCell = null;
                 }
                 return;
             }
@@ -193,6 +208,16 @@ namespace P_DAO.UIController
             // 若选中的是位于产品名字栏的Cell，则退出;
             if (culumnCaption == "Name")
             {
+                if (!string.IsNullOrEmpty(mPreProductName))
+                {
+                    mPreProductName = "";
+                }
+
+                if (!string.IsNullOrEmpty(mPreParameterName))
+                {
+                    mPreParameterName = "";
+                }
+
                 if (null != mPreFocusedCell)
                 {
                     //mPreFocusedCell.Background = Brushes.White;
@@ -202,6 +227,7 @@ namespace P_DAO.UIController
                     //cellEditor.FontWeight = FontWeights.Normal;
 
                     RestoreAppreance(mPreFocusedCell);
+                    mPreFocusedCell = null;
                 }
 
                 if (null != mPreSelectedCell)
@@ -209,6 +235,7 @@ namespace P_DAO.UIController
                     //mPreSelectedCell.Background = Brushes.White;
                     //mPreSelectedCell.Foreground = Brushes.Black;
                     RestoreAppreance(mPreSelectedCell);
+                    mPreSelectedCell = null;
                 }
                 return;
             }
