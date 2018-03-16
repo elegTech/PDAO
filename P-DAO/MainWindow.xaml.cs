@@ -43,8 +43,10 @@ namespace P_DAO
             designProject.OpenProuduct();
         }
 
-        private void biNew_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        private void biNew_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) 
         {
+            return;
+
             designProject.CreateNewProuduct();
         }
 

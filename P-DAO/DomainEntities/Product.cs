@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Xml;
 using System.Data;
-
+using System.Windows.Forms;
 
 using P_DAO.BusnessLogics;
 using P_DAO.UIController;
@@ -57,7 +57,7 @@ namespace P_DAO.DomainEntities
         public string childProductParameterName;
     }
 
-    struct ProductDependency
+    class ProductDependency
     {
         public Product sourceProduct;
         public ProductParameter sourceParameter;
@@ -201,7 +201,7 @@ namespace P_DAO.DomainEntities
             {
                 Product childProd = new Product(childProdElmt, product);  // 定义一个Product对象
                 product.AddChildProduct(childProd);
-                GenerateProductTree(childProd);   // 调用本方法进行递归
+                //GenerateProductTree(childProd);   // 调用本方法进行递归
             }
         }
 
@@ -301,7 +301,6 @@ namespace P_DAO.DomainEntities
 
         public DataTable GetSubProductInfo()
         {
-
             // 记录每个子产品输入输出参数的个数，取最大值;
             int inputParamNumMax = mParameterList.FindAll(par => par.name.StartsWith("Input_",
                     StringComparison.CurrentCultureIgnoreCase)).Count;
@@ -395,29 +394,37 @@ namespace P_DAO.DomainEntities
             if (string.IsNullOrWhiteSpace(sourceParameterName))
                 return;
 
-            ProductDependency? productDep = null;
+            ProductDependency productDep = null;
 
-            // 在父产品的依赖列表中找依赖产品及参数;
-            productDep = ParentProduct.mDependencyList.Find(dep => dep.sourceProduct == this &&
+            // 在父产品或当前产品的依赖列表中找依赖产品及参数;
+            Product tempProduct = (null != this.ParentProduct ? this.ParentProduct : this);
+
+            productDep = tempProduct.mDependencyList.Find(dep => dep.sourceProduct == this &&
                                                     dep.sourceParameter.name.Equals(sourceParameterName,
                                                     StringComparison.CurrentCultureIgnoreCase));
 
-            if (!productDep.HasValue)
+            if (null == productDep)
             {
-                productDep = ParentProduct.mDependencyList.Find(dep => dep.targetProduct == this &&
+                productDep = tempProduct.mDependencyList.Find(dep => dep.targetProduct == this &&
                                     dep.targetParameter.name.Equals(sourceParameterName,
                                     StringComparison.CurrentCultureIgnoreCase));
             }
 
-            if (productDep.Value.sourceProduct == this)
+            if (null == productDep)
             {
-                targetProduct = productDep.Value.targetProduct;
-                targetParameterName = productDep.Value.targetParameter.name;
+                MessageBox.Show("该产品：" + this.Name + "的参数：" + "sourceParameterName" + "没有" +"依赖项，请检查XML文件中依赖信息是否完整！");               
+                return;
+            }
+
+            if (productDep.sourceProduct == this)
+            {
+                targetProduct = productDep.targetProduct;
+                targetParameterName = productDep.targetParameter.name;
             }
             else
             {
-                targetProduct = productDep.Value.sourceProduct;
-                targetParameterName = productDep.Value.sourceParameter.name;
+                targetProduct = productDep.sourceProduct;
+                targetParameterName = productDep.sourceParameter.name;
             }
             
         }

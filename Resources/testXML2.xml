@@ -1,11 +1,15 @@
 <Product Name="1product" ID="1" ParentID="0" Input_1="0,1" Output_1="0,1"> 
   <Product Name="1.1subProduct" ID="2" ParentID="1" Input_1="0,1" Output_1="0,1">  
-	<Product Name="1.1.1subProduct" ID="3" ParentID="1" Input_1="1,2" Output_1="0,1"/>  
+	<Product Name="1.1.1subProduct" ID="3" ParentID="2" Input_1="1,2" Output_1="0,1"/>  
 	<Dependency SourceProduct="2" TargetProduct = "3" SourcePar="Input_1" TargetPar="Input_1"/>
 	<Dependency SourceProduct="2" TargetProduct = "3" SourcePar="Output_1" TargetPar="Output_1"/>
   </Product>  
   <Product Name="1.2subProduct2" ID="4" ParentID="1" Input_1="0,1" Output_1="0,1"/>
+  <Product Name="1.3subProduct2" ID="5" ParentID="1" Input_1="0,1" Output_1="0,1"/>
+  
   <Dependency SourceProduct="2" TargetProduct = "4" SourcePar="Output_1" TargetPar="Input_1"/> 
   <Dependency SourceProduct="1" TargetProduct = "2" SourcePar="Input_1" TargetPar="Input_1"/>
-  <Dependency SourceProduct="1" TargetProduct = "4" SourcePar="Output_1" TargetPar="Output_1"/>
+  <Dependency SourceProduct="1" TargetProduct = "5" SourcePar="Output_1" TargetPar="Output_1"/>
+  <Dependency SourceProduct="4" TargetProduct = "5" SourcePar="Output_1" TargetPar="Input_1"/>
+
 </Product>

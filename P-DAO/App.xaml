@@ -4,6 +4,7 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"  
              xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
              xmlns:dxgt="http://schemas.devexpress.com/winfx/2008/xaml/grid/themekeys"
+	         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
              StartupUri="MainWindow.xaml">
     
     <Application.Resources>
@@ -16,23 +17,29 @@
         </sys:String>
 
 
+        <DataTemplate x:Key="CellDT">
+            
+        </DataTemplate>
+
+        <Style x:Key="ViewStyle" TargetType="dxg:TableView">
+            <Setter Property="ShowHorizontalLines" Value="True"/>
+            <Setter Property="ShowVerticalLines" Value="True"/>
+        </Style>
+
         <Style x:Key="SelectionStateCellStyle" TargetType="dxg:LightweightCellEditor" BasedOn="{StaticResource ResourceKey={dxgt:GridRowThemeKey ResourceKey=LightweightCellStyle}}">
             <Style.Triggers>
                 <Trigger Property="SelectionState" Value="Selected">
-                    <Setter Property="Background" Value="Red"/>
+                    <Setter Property="Background" Value="Blue"/>
                     <Setter Property="TextBlock.FontWeight" Value="Bold"/>
 
                 </Trigger>
                 <Trigger Property="SelectionState" Value="Focused">
-                    <Setter Property="Background" Value="Green"/>
-                </Trigger>
-                <Trigger Property="SelectionState" Value="FocusedAndSelected">
-                    <Setter Property="Background" Value="Orange"/>
-
+                    <Setter Property="Background" Value="Blue"/>
                     <Setter Property="TextBlock.FontWeight" Value="Bold"/>
-
-
-                    <Setter Property="Foreground" Value="Blue"/>
+                </Trigger>
+                
+                <Trigger Property="SelectionState" Value="FocusedAndSelected">
+                    <Setter Property="Background" Value="Blue"/>
                     <Setter Property="TextBlock.FontWeight" Value="Bold"/>
 
                     <!--Setter Property="TextBlock.Foreground" Value="OrangeRed"/-->
@@ -46,15 +53,37 @@
         <Style x:Key="FocusedCellStyle" TargetType="dxg:LightweightCellEditor">
             <Style.Triggers>
                 <Trigger Property="dxg:DataViewBase.IsFocusedCell" Value="True">
-                    <Setter Property="Background" Value="Blue" />
+                    <Setter Property="Background" Value="Green" />
                 </Trigger>
                 <Trigger Property="SelectionState" Value="Selected">
-                    <Setter Property="Background" Value="Red"/>
+                    <Setter Property="Background" Value="Blue"/>
                 </Trigger>
-
-
+                
+                <Trigger Property="SelectionState" Value="FocusedAndSelected">
+                    <Setter Property="Foreground" Value="Orange"/>
+                    <Setter Property="TextBlock.FontWeight" Value="Bold"/>
+                </Trigger>
             </Style.Triggers>
         </Style>
+
+
+        <Style x:Key="FocusedCellStyle1" TargetType="dxg:LightweightCellEditor">
+            <Style.Triggers>
+                <Trigger Property="dxg:DataViewBase.IsFocusedCell" Value="True">
+                    <Setter Property="Background" Value="White" />
+                </Trigger>
+                <Trigger Property="SelectionState" Value="Selected">
+                    <Setter Property="Background" Value="White"/>
+                </Trigger>
+
+                <Trigger Property="SelectionState" Value="FocusedAndSelected">
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+
+
 
         <Style x:Key="FocusedRowStyle" TargetType="dxg:RowControl">
             <Style.Triggers>
@@ -72,16 +101,24 @@
                     <Setter Property="Background" Value="Gray" />
                     <Setter Property="Foreground" Value="White" />
                 </DataTrigger>
-                <!--Trigger Property="dxg:GridViewBase.IsFocusedRow" Value="True"-->
-                    <!-- Setter Property="Background" Value="Red" /-->
-                    <!--Setter Property="Foreground" Value="White" /-->
-                <!-- Setter Property="Background" Value="Gray" /-->
-                <!-- Setter Property="Foreground" Value="Black" /-->
-                <!--/Trigger-->
+                <Trigger Property="dxg:GridViewBase.IsFocusedRow" Value="True">
+                    <Setter Property="Background" Value="Green" />
+                    <Setter Property="Foreground" Value="White" />
+                </Trigger>
             </Style.Triggers>
         </Style>
 
 
+        <Style x:Key="SelectedRowStyle1" TargetType="{x:Type dxg:RowControl}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=IsSelected}" Value="True">
+                    <Setter Property="Background" Value="White" />
+                </DataTrigger>
+                <Trigger Property="dxg:GridViewBase.IsFocusedRow" Value="True">
+                    <Setter Property="Background" Value="White" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
 
     </Application.Resources>
