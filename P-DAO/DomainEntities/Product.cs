@@ -389,7 +389,7 @@ namespace P_DAO.DomainEntities
         }
 
 
-        public void FindNeighborParameter(string sourceParameterName, ref Product targetProduct, ref string targetParameterName)
+        public void FindDependentParameter(Product contextProduct, string sourceParameterName, ref Product targetProduct, ref string targetParameterName)
         {
             if (string.IsNullOrWhiteSpace(sourceParameterName))
                 return;
@@ -397,7 +397,13 @@ namespace P_DAO.DomainEntities
             ProductDependency productDep = null;
 
             // 在父产品或当前产品的依赖列表中找依赖产品及参数;
-            Product tempProduct = (null != this.ParentProduct ? this.ParentProduct : this);
+            // Product tempProduct = (null != this.ParentProduct ? this.ParentProduct : this);
+
+            Product tempProduct;
+            if (contextProduct == mParentProduct)
+                tempProduct = mParentProduct;
+            else 
+                tempProduct = this;
 
             productDep = tempProduct.mDependencyList.Find(dep => dep.sourceProduct == this &&
                                                     dep.sourceParameter.name.Equals(sourceParameterName,
@@ -412,7 +418,7 @@ namespace P_DAO.DomainEntities
 
             if (null == productDep)
             {
-                MessageBox.Show("该产品：" + this.Name + "的参数：" + "sourceParameterName" + "没有" +"依赖项，请检查XML文件中依赖信息是否完整！");               
+                // MessageBox.Show("该产品：" + this.Name + "的参数：" + "sourceParameterName" + "没有" +"依赖项，请检查XML文件中依赖信息是否完整！");               
                 return;
             }
 
