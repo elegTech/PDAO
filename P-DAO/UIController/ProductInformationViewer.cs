@@ -23,21 +23,20 @@ using P_DAO.DomainEntities;
 
 namespace P_DAO.UIController
 {
-    class ProductInformationViewer
+    class ProductInformationViewer : ProductViewerBase
     {
         // 物理UI,是显示该产品信息Viewer的最顶层父窗口;
-        private DocumentPanel mUIViewer;
-        
+        //private DocumentPanel mUIViewer;       
             
-        private Grid mUIGrid;
+        //private Grid mUIGrid;
 
         // 以默认的表格视图方式显示当前产品的子产品信息;
         // 也可以卡片、或树形视图方式显示;
-        private GridControl mProductInfoViewer;
+        //private GridControl mProductInfoViewer;
 
-        private TreeListControl mUITreeListControl;
+        //private TreeListControl mUITreeListControl;
 
-        private Product mProduct;
+        //private Product mProduct;
 
         // 由于每个依赖的参数显示单元格Cell是在代码中手动设置其控件的背景色,
         // 需要记录前一个获取焦点的Cell位置; 待下次选择其他Cell时将前一被选中的Cell恢复原状;
@@ -52,60 +51,68 @@ namespace P_DAO.UIController
 
         private string mPreParameterName;
 
-        private int focusedRowHandle;
+        //private int focusedRowHandle;
 
-        private GridColumn focusedColumn;
+        //private GridColumn focusedColumn;
 
-        private bool mIsUpdated;
+        //private bool mIsUpdated;
+
+
+        //public DocumentPanel UIViewer
+        //{
+        //    get { return mUIViewer; }
+        //}
+
 
         // 仅作为编码示例
-        public ProductInformationViewer(DocumentPanel uiViewer)
-        {
-            mUIViewer = uiViewer;
+        //public ProductInformationViewer(DocumentPanel uiViewer)
+        //{
+        //    mUIViewer = uiViewer;
 
-            mUIGrid = new Grid();
+        //    mUIGrid = new Grid();
 
-            mUITreeListControl = new TreeListControl();
+        //    mUITreeListControl = new TreeListControl();
 
-            mUITreeListControl.AutoGenerateColumns = AutoGenerateColumnsMode.AddNew;
+        //    mUITreeListControl.AutoGenerateColumns = AutoGenerateColumnsMode.AddNew;
 
-            mUITreeListControl.EnableSmartColumnsGeneration = true;
+        //    mUITreeListControl.EnableSmartColumnsGeneration = true;
 
-            mUITreeListControl.ItemsSource = Stuff.GetStuff();
+        //    mUITreeListControl.ItemsSource = Stuff.GetStuff();
 
-            mUITreeListControl.View = new TreeListView();
+        //    mUITreeListControl.View = new TreeListView();
 
-            mUITreeListControl.View.KeyFieldName = "ID";
+        //    mUITreeListControl.View.KeyFieldName = "ID";
 
-            mUITreeListControl.View.ParentFieldName = "ParentID";
+        //    mUITreeListControl.View.ParentFieldName = "ParentID";
             
-            mUITreeListControl.View.AllowPerPixelScrolling = true;
+        //    mUITreeListControl.View.AllowPerPixelScrolling = true;
 
-            mUITreeListControl.View.ShowTotalSummary = true;
+        //    mUITreeListControl.View.ShowTotalSummary = true;
 
-            mUITreeListControl.View.AllowEditing = false;
+        //    mUITreeListControl.View.AllowEditing = false;
 
-            mUITreeListControl.View.AutoWidth = true;
+        //    mUITreeListControl.View.AutoWidth = true;
 
-            mUITreeListControl.RefreshData();
+        //    mUITreeListControl.RefreshData();
 
-            mUIGrid.Children.Add(mUITreeListControl);
+        //    mUIGrid.Children.Add(mUITreeListControl);
 
 
-            mUIViewer.Content = mUIGrid;
-        }
+        //    mUIViewer.Content = mUIGrid;
+        //}
 
 
         public ProductInformationViewer(DocumentPanel uiViewer, Product product)
+            : base(uiViewer, product)
         {
-            mUIViewer = uiViewer;
+            //mUIViewer = uiViewer;
 
-            mProduct = product;
+            //mProduct = product;
 
-            mUIGrid = new Grid();
+            //mUIGrid = new Grid();
             
-            mProductInfoViewer = new GridControl();
-            mProductInfoViewer.AutoGenerateColumns = AutoGenerateColumnsMode.AddNew;
+            //mProductInfoViewer = new GridControl();
+            //mProductInfoViewer.AutoGenerateColumns = AutoGenerateColumnsMode.AddNew;
             
             // 设置数据来源;
             mProductInfoViewer.ItemsSource = product.GetSubProductInfo();
@@ -151,84 +158,14 @@ namespace P_DAO.UIController
 
         void CurrentItemChanged(object sender, CurrentItemChangedEventArgs e)
         {
-            GridColumn focusedColumn = (GridColumn)e.Source.CurrentColumn;
-
-            string culumnCaption = focusedColumn.HeaderCaption.ToString();
-
-
-            object o = mProductInfoViewer.GetFocusedRow();
-
-            // 若选中的是位于产品名字栏的Cell，则退出;
-            if (culumnCaption == "Name")
-            {
-
-                if (!string.IsNullOrEmpty(mPreProductName))
-                {
-                    mPreProductName = "";
-                }
-
-                if (!string.IsNullOrEmpty(mPreParameterName))
-                {
-                    mPreParameterName = ""; 
-                }
-                if (null != mPreFocusedCell)
-                {
-                    RestoreAppreance(mPreFocusedCell);
-                    mPreFocusedCell = null;
-                }
-
-                if (null != mPreSelectedCell)
-                {
-                    RestoreAppreance(mPreSelectedCell);
-                    mPreSelectedCell = null;
-                }
-                return;
-            }
-            string productName = mProductInfoViewer.GetFocusedRowCellDisplayText("Name");
-
-            //mProductInfoViewer.UnselectAll();
-
-            SelectDependentProduct(productName, culumnCaption);
+            FocusedCellChanged();
+            return;
         }
 
         void CurrentColumnChanged(object sender, CurrentColumnChangedEventArgs e)
         {
-            GridColumn focusedColumn = (GridColumn)e.NewColumn;
-
-            string culumnCaption = focusedColumn.HeaderCaption.ToString();
-
-            // 若选中的是位于产品名字栏的Cell，则舍弃所记录的上一次获取焦点和依赖的Cell;
-            if (culumnCaption == "Name")
-            {
-                if (!string.IsNullOrEmpty(mPreProductName))
-                {
-                    mPreProductName = "";
-                }
-
-                if (!string.IsNullOrEmpty(mPreParameterName))
-                {
-                    mPreParameterName = "";
-                }
-
-                if (null != mPreFocusedCell)
-                {
-                    RestoreAppreance(mPreFocusedCell);
-                    mPreFocusedCell = null;
-                }
-
-                if (null != mPreSelectedCell)
-                {
-                    RestoreAppreance(mPreSelectedCell);
-                    mPreSelectedCell = null;
-                }
-                return;
-            }
-            string productName = mProductInfoViewer.GetFocusedRowCellDisplayText("Name");
-
-            //mProductInfoViewer.UnselectAll();
-
-            SelectDependentProduct(productName, culumnCaption);
-            
+            FocusedCellChanged();
+            return;            
         }
 
         public void SelectDependentProduct(string productName, string parameterName)
@@ -346,9 +283,44 @@ namespace P_DAO.UIController
         }
 
 
-        public DocumentPanel UIViewer
+        private void FocusedCellChanged()
         {
-            get { return mUIViewer; }
+            GridColumn focusedColumn = (GridColumn)mProductInfoViewer.CurrentColumn;
+
+            string culumnCaption = focusedColumn.HeaderCaption.ToString();
+
+            // 若选中的是位于产品名字栏的Cell，则退出;
+            if (culumnCaption == "Name")
+            {
+
+                if (!string.IsNullOrEmpty(mPreProductName))
+                {
+                    mPreProductName = "";
+                }
+
+                if (!string.IsNullOrEmpty(mPreParameterName))
+                {
+                    mPreParameterName = "";
+                }
+                if (null != mPreFocusedCell)
+                {
+                    RestoreAppreance(mPreFocusedCell);
+                    mPreFocusedCell = null;
+                }
+
+                if (null != mPreSelectedCell)
+                {
+                    RestoreAppreance(mPreSelectedCell);
+                    mPreSelectedCell = null;
+                }
+                return;
+            }
+            string productName = mProductInfoViewer.GetFocusedRowCellDisplayText("Name");
+
+            //mProductInfoViewer.UnselectAll();
+
+            SelectDependentProduct(productName, culumnCaption);
+        
         }
 
 

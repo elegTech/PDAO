@@ -98,7 +98,9 @@
     <Compile Include="DomainEntities\DAOProject.cs" />
     <Compile Include="Serialization\Serializer.cs" />
     <Compile Include="UIController\ProductInformationViewer.cs" />
+    <Compile Include="UIController\ProductInterfaceCompatibilityViewer.cs" />
     <Compile Include="UIController\ProductStructureViewer.cs" />
+    <Compile Include="UIController\ProductViewerBase.cs" />
     <Compile Include="Window1.xaml.cs">
       <DependentUpon>Window1.xaml</DependentUpon>
     </Compile>

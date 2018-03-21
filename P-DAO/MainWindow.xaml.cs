@@ -50,6 +50,15 @@ namespace P_DAO
             designProject.CreateNewProuduct();
         }
 
+
+        private void biRatio_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) 
+        {
+            return;
+            designProject.CreateNewProuduct();
+        }
+        
+
+
         // Logics for a row has been double clicked.
         private void structureView_RowDoubleClick(object sender, DevExpress.Xpf.Grid.RowDoubleClickEventArgs e)
         {

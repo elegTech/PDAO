@@ -9,6 +9,10 @@
             <dxb:BarManager.Items>
                 <dxb:BarButtonItem x:Name="biOpen" ItemClick="biOpen_ItemClick" Content="Open" Glyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/Open_16x16.png" LargeGlyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/Open_32x32.png"/>
                 <dxb:BarButtonItem x:Name="biNew" ItemClick="biNew_ItemClick"  Content="New" Glyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/New_16x16.png" LargeGlyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/New_32x32.png"/>
+                <dxb:BarButtonItem x:Name="biRatio" ItemClick="biRatio_ItemClick" Content="New" LargeGlyph="{dx:DXImage Image=AlignVerticalCenter_32x32.png}" Glyph="{dx:DXImage Image=AlignVerticalCenter_32x32.png}" />
+
+
+
                 <dxb:BarCheckItem x:Name="biCenter" Glyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Format/AlignCenter_16x16.png" GroupIndex="1"/>
                 <dxb:BarCheckItem x:Name="biRight" Glyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Format/AlignRight_16x16.png" GroupIndex="1"/>
                 <dxb:BarCheckItem x:Name="biLeft" Glyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Format/AlignLeft_16x16.png" GroupIndex="1" IsChecked="True"/>
@@ -33,6 +37,11 @@
                                 <dxb:BarButtonItemLink BarItemName="biNew"/>
                             </dxr:RibbonPageGroup>
                         </dxr:RibbonPage>
+                        <dxr:RibbonPage Caption="Interface">
+                            <dxr:RibbonPageGroup Caption="Compatibility">
+                                <dxb:BarButtonItemLink x:Name="Ratio"/>
+                            </dxr:RibbonPageGroup>
+                        </dxr:RibbonPage>
                     </dxr:RibbonDefaultPageCategory>
                 </dxr:RibbonControl>
                 <dxr:RibbonStatusBarControl DockPanel.Dock="Bottom">
@@ -52,10 +61,10 @@
                     <!--利用嵌套的DockLayoutManager控件实现多窗口布局, 其简单示例见Window1例子-->
                     <dxdo:DockLayoutManager>
                         <dxdo:LayoutGroup Caption="LayoutRoot" Orientation="Vertical">
-                            <dxdo:LayoutPanel Caption="Product" ItemHeight="1.65*">
+                            <dxdo:LayoutPanel Caption="Product" ItemHeight="1.65*" ShowCaption="False">
 
                                 <dxdo:DockLayoutManager x:Name="docLayoutManager">
-                                    <dxdo:LayoutGroup>
+                                    <dxdo:LayoutGroup GroupBorderStyle="NoBorder">
                                         <dxdo:LayoutPanel Caption="ProductStructure" FloatOnDoubleClick="False">
                                     <dxg:TreeListControl x:Name="productStructureTree" AutoGenerateColumns="AddNew" EnableSmartColumnsGeneration="True">
                                         <dxg:TreeListControl.View>

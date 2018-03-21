@@ -23,7 +23,7 @@ using P_DAO.UIController;
 
 namespace P_DAO.DomainEntities
 {
-    struct ProductParameter
+    class ProductParameter
     {
         public ProductParameter(string name, double minValue, double maxValue)
         {
@@ -33,6 +33,8 @@ namespace P_DAO.DomainEntities
 
             childProductName = string.Empty;
             childProductParameterName = string.Empty;
+
+            mCompatibilityRatio = double.NaN;
         }
 
         // 对于包含子产品的父产品, 其输入输出参数均由子产品的参数来表示;
@@ -44,6 +46,7 @@ namespace P_DAO.DomainEntities
 
             minValue = double.NaN;
             maxValue = double.NaN;
+            mCompatibilityRatio = double.NaN;
         }
 
         public string name;
@@ -52,9 +55,13 @@ namespace P_DAO.DomainEntities
 
         // 对任意父产品而言, 其输入/输出参数均为某子产品的
         // 输入/输出参数, 需记录相应的产品名和参数名;
-        public string childProductName;
-        
+        public string childProductName; 
         public string childProductParameterName;
+
+        // 该参数与相邻产品参数的兼容比值;
+        // 以两个参数取值区间的交集区间占各参数取值区间的比;
+        public double mCompatibilityRatio;
+
     }
 
     class ProductDependency
@@ -83,6 +90,10 @@ namespace P_DAO.DomainEntities
         private Product mParentProduct;
 
         private List<Product> mChildProductList;
+
+        private double THRESHOLD = 1e-5;
+        private static double ONE = 1.000000000000;
+
 
         // 为注册全局Product的容器;
         private static List<Product> productList = new List<Product>();
@@ -165,6 +176,14 @@ namespace P_DAO.DomainEntities
             mParentID = productXmlElement.Attribute("ParentID").Value;
 
             mParentProduct = parent;
+            if (null == mParentProduct)
+            {
+                foreach (ProductParameter prodPar in mParameterList)
+                {
+                    prodPar.mCompatibilityRatio = ONE;
+                }
+            }
+            
             mDependencyList = new List<ProductDependency>();
             mProductXML = productXmlElement;
 
@@ -298,8 +317,47 @@ namespace P_DAO.DomainEntities
                                         StringComparison.CurrentCultureIgnoreCase));
         }
 
+        public DataTable GetSubProductCompatibilityInfo()
+        {
+            foreach (Product child in mChildProductList)
+            {
+                child.CalculateInterfaceCompatibility();
+            }
 
-        public DataTable GetSubProductInfo()
+            DataTable subProductCompatibilityInfoTable = GenerateEmptyTable();
+
+            // 将当前产品参数的兼容性数值放入表中;
+            DataRow row = subProductCompatibilityInfoTable.NewRow();
+            row["Name"] = Name;
+
+            foreach (ProductParameter par in mParameterList)
+            {
+                row[par.name] = par.mCompatibilityRatio.ToString("0.00%");
+            }
+
+            subProductCompatibilityInfoTable.Rows.Add(row);
+
+
+            foreach (Product child in mChildProductList)
+            {
+                row = subProductCompatibilityInfoTable.NewRow();
+                row["Name"] = child.Name;
+
+                foreach (ProductParameter par in child.ParameterList)
+                {
+                    row[par.name] = par.mCompatibilityRatio.ToString("0.00%");
+                }
+
+                subProductCompatibilityInfoTable.Rows.Add(row);
+            }
+
+            return subProductCompatibilityInfoTable;
+
+        }
+
+
+
+        private DataTable GenerateEmptyTable()
         {
             // 记录每个子产品输入输出参数的个数，取最大值;
             int inputParamNumMax = mParameterList.FindAll(par => par.name.StartsWith("Input_",
@@ -322,7 +380,7 @@ namespace P_DAO.DomainEntities
             }
 
             // 构建容纳子产品数据列表表格
-            DataTable subProductInfoTable = new DataTable();
+            DataTable productInfoTable = new DataTable();
 
             DataColumn column = new DataColumn();
             column.DataType = System.Type.GetType("System.String");
@@ -331,7 +389,7 @@ namespace P_DAO.DomainEntities
             column.Caption = "Product Name";
             column.ReadOnly = true;
             column.Unique = false;
-            subProductInfoTable.Columns.Add(column);
+            productInfoTable.Columns.Add(column);
 
             for (int i = 1; i <= inputParamNumMax; i++)
             {
@@ -342,7 +400,7 @@ namespace P_DAO.DomainEntities
                 column.Caption = "Input_" + i.ToString();
                 column.ReadOnly = true;
                 column.Unique = false;
-                subProductInfoTable.Columns.Add(column);
+                productInfoTable.Columns.Add(column);
             }
 
             for (int i = 1; i <= outputParamNumMax; i++)
@@ -354,14 +412,21 @@ namespace P_DAO.DomainEntities
                 column.Caption = "Output_" + i.ToString();
                 column.ReadOnly = true;
                 column.Unique = false;
-                subProductInfoTable.Columns.Add(column);
+                productInfoTable.Columns.Add(column);
             }
 
-            
-            DataRow row;
+            return productInfoTable;
+        }
 
+
+
+        public DataTable GetSubProductInfo()
+        {
+            // 构建容纳子产品数据列表表格
+            DataTable subProductInfoTable = GenerateEmptyTable();
+            
             // 将当前产品信息放入表中;
-            row = subProductInfoTable.NewRow();
+            DataRow row = subProductInfoTable.NewRow();
             row["Name"] = Name;
 
             foreach (ProductParameter par in mParameterList)
@@ -389,6 +454,13 @@ namespace P_DAO.DomainEntities
         }
 
 
+        /// <summary>
+        /// 输出contextProduct
+        /// </summary>
+        /// <param name="contextProduct">该参数为当前本产品或父产品 </param>
+        /// <param name="sourceParameterName"></param>
+        /// <param name="targetProduct"></param>
+        /// <param name="targetParameterName"></param>
         public void FindDependentParameter(Product contextProduct, string sourceParameterName, ref Product targetProduct, ref string targetParameterName)
         {
             if (string.IsNullOrWhiteSpace(sourceParameterName))
@@ -434,6 +506,74 @@ namespace P_DAO.DomainEntities
             }
             
         }
+
+        // 根据接口参数取值的区间, 定量计算
+        public void CalculateInterfaceCompatibility()
+        {
+            Product tempDependentProduct = null;
+            string tempDependentParameterName = "";
+            ProductParameter tempDependentParameter = null;
+            foreach(ProductParameter productPar in mParameterList)
+            {
+                // 若兼容比值已计算则略过;
+                if (!double.IsNaN(productPar.mCompatibilityRatio))
+                    continue;
+
+                FindDependentParameter(mParentProduct, productPar.name, ref tempDependentProduct, ref tempDependentParameterName);
+                tempDependentParameter = tempDependentProduct.GetParameter(tempDependentParameterName);
+                    
+                // 若当前Product的依赖产品为其父产品, 则参数的兼容比值直接从父Product的依赖参数中获取,无需计算;
+                if (tempDependentProduct == mParentProduct)
+                {
+                    if (!double.IsNaN(tempDependentParameter.mCompatibilityRatio))
+                    {
+                        productPar.mCompatibilityRatio = tempDependentParameter.mCompatibilityRatio;
+                        continue;
+                    }
+                }
+
+                // 说明两区间无交集;
+                if (productPar.maxValue < tempDependentParameter.minValue ||
+                    tempDependentParameter.maxValue < productPar.minValue)
+                {
+                    productPar.mCompatibilityRatio = 0.0;
+                }
+                // 两区间交集仅为一个孤立的数字;
+                else if ((Math.Abs(productPar.maxValue - tempDependentParameter.minValue) < THRESHOLD) ||
+                         (Math.Abs(tempDependentParameter.maxValue - productPar.minValue) < THRESHOLD))
+                {
+                    productPar.mCompatibilityRatio = 0.0;
+                }
+                // 两区间存在交集，此时求出该交集区间
+                else 
+                {
+                    List<double> list = new List<double>();
+                    list.Add(tempDependentParameter.minValue);
+                    list.Add(tempDependentParameter.maxValue);
+                    list.Add(productPar.minValue);
+                    list.Add(productPar.maxValue);
+                    list.Sort();
+
+                    // 在交集存在的前提下，中间两个数值为交集区间;
+                    double floorValueOfIntersection = list[1];
+                    double ceilValueOfIntersection = list[2];
+
+                    productPar.mCompatibilityRatio = Math.Abs(ceilValueOfIntersection - floorValueOfIntersection) / Math.Abs(productPar.maxValue - productPar.minValue);
+                    tempDependentParameter.mCompatibilityRatio = Math.Abs(ceilValueOfIntersection - floorValueOfIntersection) / Math.Abs(tempDependentParameter.maxValue - tempDependentParameter.minValue);
+                }
+            }
+        }
+
+    
+
+        public ProductParameter GetParameter(string name)
+        {
+            if (null == mParameterList || mParameterList.Count == 0)
+                return null;
+
+            return mParameterList.Find(par => string.Equals(par.name, name, StringComparison.CurrentCulture));
+        }
+
         
         #endregion
 
