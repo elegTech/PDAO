@@ -19,10 +19,10 @@ namespace P_DAO.UIController
         public ProductInterfaceCompatibilityViewer(DocumentPanel uiViewer, Product product)
             : base(uiViewer, product)
         {
-            mProductInfoViewer.ItemsSource = product.GetSubProductCompatibilityInfo();
+            mProductInfoContainer.ItemsSource = product.GetSubProductCompatibilityInfo();
 
             // 设置表格视图显示属性;
-            TableView view = (TableView)mProductInfoViewer.View;
+            TableView view = (TableView)mProductInfoContainer.View;
             // 隐藏列排序设置面板, 用户可通过右键菜单显示;
             view.ShowGroupPanel = false;
 
@@ -36,7 +36,7 @@ namespace P_DAO.UIController
 
             view.UseIndicatorForSelection = true;
 
-            mUIGrid.Children.Add(mProductInfoViewer);
+            mUIGrid.Children.Add(mProductInfoContainer);
 
             mUIViewer.Content = mUIGrid;
 

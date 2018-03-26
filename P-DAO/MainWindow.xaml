@@ -9,7 +9,7 @@
             <dxb:BarManager.Items>
                 <dxb:BarButtonItem x:Name="biOpen" ItemClick="biOpen_ItemClick" Content="Open" Glyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/Open_16x16.png" LargeGlyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/Open_32x32.png"/>
                 <dxb:BarButtonItem x:Name="biNew" ItemClick="biNew_ItemClick"  Content="New" Glyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/New_16x16.png" LargeGlyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/New_32x32.png"/>
-                <dxb:BarButtonItem x:Name="biRatio" ItemClick="biRatio_ItemClick" Content="New" LargeGlyph="{dx:DXImage Image=AlignVerticalCenter_32x32.png}" Glyph="{dx:DXImage Image=AlignVerticalCenter_32x32.png}" />
+                <dxb:BarButtonItem x:Name="biRatio" ItemClick="biRatio_ItemClick" Content="Ratio" LargeGlyph="{dx:DXImage Image=AlignVerticalCenter_32x32.png}" Glyph="{dx:DXImage Image=AlignVerticalCenter_32x32.png}" />
 
 
 
@@ -39,7 +39,7 @@
                         </dxr:RibbonPage>
                         <dxr:RibbonPage Caption="Interface">
                             <dxr:RibbonPageGroup Caption="Compatibility">
-                                <dxb:BarButtonItemLink x:Name="Ratio"/>
+                                <dxb:BarButtonItemLink BarItemName="biRatio"/>
                             </dxr:RibbonPageGroup>
                         </dxr:RibbonPage>
                     </dxr:RibbonDefaultPageCategory>

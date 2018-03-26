@@ -27,11 +27,14 @@ namespace P_DAO.DomainEntities
         public delegate void ProductCreateEventHandler(Product product);
         public delegate void ProductLoadEventHandler(Product product);
         public delegate void ProductActivateEventHandler(string productName);
+        public delegate void RatioGenerationEventHandler(string productName);
+
 
         public event ProductCloseEventHandler CloseEvent;
         public event ProductCreateEventHandler ProductCreateAfterEvent;
         public event ProductLoadEventHandler ProductLoadAfterEvent;
         public event ProductActivateEventHandler ProductActivateEvent;
+        public event RatioGenerationEventHandler RatioGenerationEvent;
 
 
 
@@ -92,6 +95,9 @@ namespace P_DAO.DomainEntities
             ProductCreateAfterEvent += mProdInfoViewerMgr.CreateProductInformationViewer;
             ProductLoadAfterEvent += mProdInfoViewerMgr.CreateProductInformationViewer;
             ProductActivateEvent += mProdInfoViewerMgr.ShowProductInfoViewer;
+
+            RatioGenerationEvent += mProdInfoViewerMgr.CalculateProductCompatibilityRatio;
+
         }
 
 
@@ -139,12 +145,33 @@ namespace P_DAO.DomainEntities
 
         public void ActivateProduct()
         {
-            TreeListControl ctrl = (TreeListControl)mMainUI.FindName("productStructureTree");
-            TreeListNode node = ctrl.GetSelectedNodes()[0];
-            DataRowView rowView = (DataRowView)node.Content;
-            DataRow data = rowView.Row;
+            //TreeListControl ctrl = (TreeListControl)mMainUI.FindName("productStructureTree");
+            //TreeListNode node = ctrl.GetSelectedNodes()[0];
+            //DataRowView rowView = (DataRowView)node.Content;
+            //DataRow data = rowView.Row;
 
-            ProductActivateEvent((string)data["Name"]);        
+            //ProductActivateEvent((string)data["Name"]);        
+
+            string productName = mLogicProductStructureViewer.SelectedNodeName();
+            if (string.IsNullOrEmpty(productName))
+                return;
+
+            ProductActivateEvent(productName);   
         }
+
+        public void GenerateProuductRatio()
+        {
+            if (null == mRootProduct)
+                return;
+
+            string productName = mLogicProductStructureViewer.SelectedNodeName();
+            if (string.IsNullOrEmpty(productName))
+                return;
+
+            RatioGenerationEvent(productName);        
+        }
+
+
+
     }
 }

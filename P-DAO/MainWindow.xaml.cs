@@ -53,8 +53,7 @@ namespace P_DAO
 
         private void biRatio_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) 
         {
-            return;
-            designProject.CreateNewProuduct();
+            designProject.GenerateProuductRatio();
         }
         
 

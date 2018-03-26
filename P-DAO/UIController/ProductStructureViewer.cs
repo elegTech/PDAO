@@ -64,6 +64,15 @@ namespace P_DAO.UIController
             mProductUIViewer.RefreshData();
         }
 
+        public string SelectedNodeName()
+        {
+            TreeListNode node = mProductUIViewer.GetSelectedNodes()[0];
+            DataRowView rowView = (DataRowView)node.Content;
+            DataRow data = rowView.Row;
+
+            return ((string)data["Name"]);       
+        }
+
 
         #endregion
 

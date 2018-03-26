@@ -32,7 +32,7 @@ namespace P_DAO.UIController
 
         // 以默认的表格视图方式显示当前产品的子产品信息;
         // 也可以卡片、或树形视图方式显示;
-        //private GridControl mProductInfoViewer;
+        //private GridControl mProductInfoContainer;
 
         //private TreeListControl mUITreeListControl;
 
@@ -50,6 +50,9 @@ namespace P_DAO.UIController
         private string mPreProductName;
 
         private string mPreParameterName;
+
+
+        private DependencySelector mDependencySelector;
 
         //private int focusedRowHandle;
 
@@ -111,14 +114,14 @@ namespace P_DAO.UIController
 
             //mUIGrid = new Grid();
             
-            //mProductInfoViewer = new GridControl();
-            //mProductInfoViewer.AutoGenerateColumns = AutoGenerateColumnsMode.AddNew;
+            //mProductInfoContainer = new GridControl();
+            //mProductInfoContainer.AutoGenerateColumns = AutoGenerateColumnsMode.AddNew;
             
             // 设置数据来源;
-            mProductInfoViewer.ItemsSource = product.GetSubProductInfo();
+            mProductInfoContainer.ItemsSource = product.GetSubProductInfo();
 
             // 设置表格视图显示属性;
-            TableView view = (TableView)mProductInfoViewer.View;
+            TableView view = (TableView)mProductInfoContainer.View;
             // 隐藏列排序设置面板, 用户可通过右键菜单显示;
             view.ShowGroupPanel = false;
 
@@ -134,37 +137,45 @@ namespace P_DAO.UIController
 
             view.UseIndicatorForSelection = true;
 
-            mUIGrid.Children.Add(mProductInfoViewer);
+            mUIGrid.Children.Add(mProductInfoContainer);
 
             mUIViewer.Content = mUIGrid;
 
             view.UseLightweightTemplates = UseLightweightTemplates.All;
 
-            mProductInfoViewer.SelectionMode = MultiSelectMode.Cell;
+            mProductInfoContainer.SelectionMode = MultiSelectMode.Cell;
 
             view.NavigationStyle = GridViewNavigationStyle.Cell;
 
-            mProductInfoViewer.CurrentColumnChanged += CurrentColumnChanged;
-            mProductInfoViewer.CurrentItemChanged += CurrentItemChanged;
+            mProductInfoContainer.CurrentColumnChanged += CurrentColumnChanged;
+            mProductInfoContainer.CurrentItemChanged += CurrentItemChanged;
+
+            mDependencySelector = new DependencySelector(this);
+
+            FocusedCellChangedEvent += mDependencySelector.ChangeFocusedCell;
 
             //view.FocusedRowHandleChanged +=view_FocusedRowHandleChanged;
         }
 
-        void view_FocusedRowHandleChanged(object sender, FocusedRowHandleChangedEventArgs e)
+        public void view_FocusedRowHandleChanged(object sender, FocusedRowHandleChangedEventArgs e)
         {
 
 
         }
 
-        void CurrentItemChanged(object sender, CurrentItemChangedEventArgs e)
+        public void CurrentItemChanged(object sender, CurrentItemChangedEventArgs e)
         {
-            FocusedCellChanged();
+            InvokeFocusedCellChangedEvent();
+            //FocusedCellChangedEvent();
+            //ChangeFocusedCell();
             return;
         }
 
-        void CurrentColumnChanged(object sender, CurrentColumnChangedEventArgs e)
+        public void CurrentColumnChanged(object sender, CurrentColumnChangedEventArgs e)
         {
-            FocusedCellChanged();
+            InvokeFocusedCellChangedEvent();
+            //FocusedCellChangedEvent();
+            //ChangeFocusedCell();
             return;            
         }
 
@@ -181,7 +192,7 @@ namespace P_DAO.UIController
             
             LightweightCellEditor focuesdCellElmt;
             int focusedRowHandle;
-            TableView view = (TableView)mProductInfoViewer.View;
+            TableView view = (TableView)mProductInfoContainer.View;
 
             // 若在当前上下文中没有找到依赖产品参数,说明该产品已经是叶子产品,仅需高亮该获取焦点的Cell即可;
             if (null == dependentProduct)
@@ -191,9 +202,9 @@ namespace P_DAO.UIController
                     RestoreAppreance(mPreFocusedCell);
                 }
 
-                focusedRowHandle = mProductInfoViewer.FindRowByValue("Name", productName);
-                focuesdCellElmt = (LightweightCellEditor)view.GetCellElementByRowHandleAndColumn(focusedRowHandle, mProductInfoViewer.Columns.First(col => col.HeaderCaption.ToString().Equals(parameterName, StringComparison.CurrentCultureIgnoreCase)));
-                focusedRowHandle = mProductInfoViewer.FindRowByValue("Name", productName);
+                focusedRowHandle = mProductInfoContainer.FindRowByValue("Name", productName);
+                focuesdCellElmt = (LightweightCellEditor)view.GetCellElementByRowHandleAndColumn(focusedRowHandle, mProductInfoContainer.Columns.First(col => col.HeaderCaption.ToString().Equals(parameterName, StringComparison.CurrentCultureIgnoreCase)));
+                focusedRowHandle = mProductInfoContainer.FindRowByValue("Name", productName);
 
                 focuesdCellElmt.Background = Brushes.Orange;
                 InplaceBaseEdit cellEditor = (InplaceBaseEdit)focuesdCellElmt.Content;
@@ -213,13 +224,13 @@ namespace P_DAO.UIController
                 return;
 
 
-            focusedRowHandle = mProductInfoViewer.FindRowByValue("Name", productName);
+            focusedRowHandle = mProductInfoContainer.FindRowByValue("Name", productName);
 
-            neighborRowHandle = mProductInfoViewer.FindRowByValue("Name", dependentProduct.Name);
+            neighborRowHandle = mProductInfoContainer.FindRowByValue("Name", dependentProduct.Name);
 
-            dependentCellElmt = (LightweightCellEditor)view.GetCellElementByRowHandleAndColumn(neighborRowHandle, mProductInfoViewer.Columns.First(col => col.HeaderCaption.ToString().Equals(dependentParameterName, StringComparison.CurrentCultureIgnoreCase)));
+            dependentCellElmt = (LightweightCellEditor)view.GetCellElementByRowHandleAndColumn(neighborRowHandle, mProductInfoContainer.Columns.First(col => col.HeaderCaption.ToString().Equals(dependentParameterName, StringComparison.CurrentCultureIgnoreCase)));
 
-            focuesdCellElmt = (LightweightCellEditor)view.GetCellElementByRowHandleAndColumn(focusedRowHandle, mProductInfoViewer.Columns.First(col => col.HeaderCaption.ToString().Equals(parameterName, StringComparison.CurrentCultureIgnoreCase)));
+            focuesdCellElmt = (LightweightCellEditor)view.GetCellElementByRowHandleAndColumn(focusedRowHandle, mProductInfoContainer.Columns.First(col => col.HeaderCaption.ToString().Equals(parameterName, StringComparison.CurrentCultureIgnoreCase)));
             
 
             // 如果当前需选择的Cell和前一个选择的mPreSelectedCell相同, 则退出;
@@ -283,9 +294,9 @@ namespace P_DAO.UIController
         }
 
 
-        private void FocusedCellChanged()
+        private void ChangeFocusedCell()
         {
-            GridColumn focusedColumn = (GridColumn)mProductInfoViewer.CurrentColumn;
+            GridColumn focusedColumn = (GridColumn)mProductInfoContainer.CurrentColumn;
 
             string culumnCaption = focusedColumn.HeaderCaption.ToString();
 
@@ -315,9 +326,9 @@ namespace P_DAO.UIController
                 }
                 return;
             }
-            string productName = mProductInfoViewer.GetFocusedRowCellDisplayText("Name");
+            string productName = mProductInfoContainer.GetFocusedRowCellDisplayText("Name");
 
-            //mProductInfoViewer.UnselectAll();
+            //mProductInfoContainer.UnselectAll();
 
             SelectDependentProduct(productName, culumnCaption);
         

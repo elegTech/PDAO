@@ -15,14 +15,14 @@ namespace P_DAO.UIController
 {
     class ProductViewerBase
     {
-        protected ProductViewerBase(DocumentPanel uIViewer, Product product)  
+        public ProductViewerBase(DocumentPanel uIViewer, Product product)  
         {
             this.mUIViewer = uIViewer;
             this.mUIGrid = new Grid();
             this.mProduct = product;
 
-            this.mProductInfoViewer = new GridControl();
-            this.mProductInfoViewer.AutoGenerateColumns = AutoGenerateColumnsMode.AddNew;
+            this.mProductInfoContainer = new GridControl();
+            this.mProductInfoContainer.AutoGenerateColumns = AutoGenerateColumnsMode.AddNew;
         }
 
 
@@ -30,17 +30,33 @@ namespace P_DAO.UIController
 
         protected Grid mUIGrid;
 
-        protected GridControl mProductInfoViewer;
+        protected GridControl mProductInfoContainer;
 
         protected Product mProduct;
+
+        protected delegate void FocusedCellChangedEventHandler();
+
+        protected event FocusedCellChangedEventHandler FocusedCellChangedEvent;
+
 
         public DocumentPanel UIViewer
         {
             get { return mUIViewer; }
         }
 
+        public GridControl InfoContainer
+        {
+            get { return mProductInfoContainer; }
+        }
+
+        public void InvokeFocusedCellChangedEvent()
+        {
+            FocusedCellChangedEvent();
+        }
+
         public Product Product
         {
+
             get { return mProduct; }
         }
 

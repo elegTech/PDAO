@@ -102,8 +102,9 @@ namespace P_DAO.BusnessLogics
             if (null == product)
                 return;
             if (mProduct2ViewerDictionary.ContainsKey(product))
+            {
                 return;
-
+            }
             DocumentPanel panel = CreateNewPanel(product.Name);
 
             ProductInformationViewer productInfoViewer = new ProductInformationViewer(panel, product);
@@ -115,8 +116,9 @@ namespace P_DAO.BusnessLogics
             if (null == product)
                 return;
             if (mProduct2CompViewerDictionary.ContainsKey(product))
+            {
                 return;
-
+            }
 
             DocumentPanel panel = CreateNewPanel(product.Name);
 
@@ -143,6 +145,30 @@ namespace P_DAO.BusnessLogics
             {
                 CreateProductInformationViewer(product);
             }
+        }
+
+        public void CalculateProductCompatibilityRatio(string productName)
+        {
+            if (string.IsNullOrWhiteSpace(productName))
+                return;
+
+            Product product = Product.GetProduct(productName);
+
+            if (null == product)
+                return;
+
+            if (mProduct2CompViewerDictionary.ContainsKey(product))
+            {
+                mProduct2CompViewerDictionary[product].UIViewer.Closed = false;
+                mProduct2CompViewerDictionary[product].UIViewer.Visibility = System.Windows.Visibility.Visible;
+
+                int index = mProductInfoUIViewers.Items.IndexOf(mProduct2CompViewerDictionary[product].UIViewer);
+                mProductInfoUIViewers.SelectedTabIndex = index;
+                return;
+            }
+
+            product.CalculateInterfaceCompatibility();
+            CreateProductCompatilityInformationViewer(product);
         }
 
     }

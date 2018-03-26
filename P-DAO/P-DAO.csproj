@@ -97,6 +97,7 @@
     <Compile Include="BusnessLogics\ProductInfoViewerManager.cs" />
     <Compile Include="DomainEntities\DAOProject.cs" />
     <Compile Include="Serialization\Serializer.cs" />
+    <Compile Include="UIController\DependencySelector.cs" />
     <Compile Include="UIController\ProductInformationViewer.cs" />
     <Compile Include="UIController\ProductInterfaceCompatibilityViewer.cs" />
     <Compile Include="UIController\ProductStructureViewer.cs" />
