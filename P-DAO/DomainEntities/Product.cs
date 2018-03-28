@@ -16,6 +16,8 @@ using System.IO;
 using System.Xml;
 using System.Data;
 using System.Windows.Forms;
+using System.Globalization;
+
 
 using P_DAO.BusnessLogics;
 using P_DAO.UIController;
@@ -330,9 +332,12 @@ namespace P_DAO.DomainEntities
             DataRow row = subProductCompatibilityInfoTable.NewRow();
             row["Name"] = Name;
 
+            //必须以数字为输入才能在TableView中支持条件格式化，即按照一定规则对相应Cell进行高亮等格式化显示;
             foreach (ProductParameter par in mParameterList)
             {
-                row[par.name] = par.mCompatibilityRatio.ToString("0.00%");
+                row[par.name] = double.Parse(par.mCompatibilityRatio.ToString("N2", CultureInfo.InvariantCulture));
+
+                //row[par.name] = par.mCompatibilityRatio.ToString("0.00%");
             }
 
             subProductCompatibilityInfoTable.Rows.Add(row);
@@ -345,7 +350,8 @@ namespace P_DAO.DomainEntities
 
                 foreach (ProductParameter par in child.ParameterList)
                 {
-                    row[par.name] = par.mCompatibilityRatio.ToString("0.00%");
+                    row[par.name] = double.Parse(par.mCompatibilityRatio.ToString("N2", CultureInfo.InvariantCulture));
+                    //row[par.name] = par.mCompatibilityRatio.ToString("0.00%");
                 }
 
                 subProductCompatibilityInfoTable.Rows.Add(row);

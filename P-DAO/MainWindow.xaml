@@ -10,12 +10,17 @@
                 <dxb:BarButtonItem x:Name="biOpen" ItemClick="biOpen_ItemClick" Content="Open" Glyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/Open_16x16.png" LargeGlyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/Open_32x32.png"/>
                 <dxb:BarButtonItem x:Name="biNew" ItemClick="biNew_ItemClick"  Content="New" Glyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/New_16x16.png" LargeGlyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/New_32x32.png"/>
                 <dxb:BarButtonItem x:Name="biRatio" ItemClick="biRatio_ItemClick" Content="Ratio" LargeGlyph="{dx:DXImage Image=AlignVerticalCenter_32x32.png}" Glyph="{dx:DXImage Image=AlignVerticalCenter_32x32.png}" />
-
+                <dxb:BarButtonItem x:Name="biStructure" ItemClick="biStructure_ItemClick" Content="Structure" Glyph="{dx:DXImage Image=DocumentMap_16x16.png}" LargeGlyph="{dx:DXImage Image=DocumentMap_32x32.png}"/>
+                <dxb:BarButtonItem x:Name="biAnalysis" ItemClick="biAnalysis_ItemClick" Content="Analysis" RibbonStyle="Large" Glyph="{dx:DXImage Image=Cards_16x16.png}" LargeGlyph="{dx:DXImage Image=Cards_32x32.png}"/>
+                <dxb:BarButtonItem x:Name="biResult" ItemClick="biResult_ItemClick" Content="Result" Glyph="{dx:DXImage Image=ConvertToParagraphs_16x16.png}" LargeGlyph="{dx:DXImage Image=ConvertToParagraphs_32x32.png}" RibbonStyle="Large"/>
 
 
                 <dxb:BarCheckItem x:Name="biCenter" Glyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Format/AlignCenter_16x16.png" GroupIndex="1"/>
                 <dxb:BarCheckItem x:Name="biRight" Glyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Format/AlignRight_16x16.png" GroupIndex="1"/>
                 <dxb:BarCheckItem x:Name="biLeft" Glyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Format/AlignLeft_16x16.png" GroupIndex="1" IsChecked="True"/>
+                
+                
+                
                 <dxb:BarStaticItem x:Name="biRow" Content="Row:" ShowBorder="False"/>
                 <dxb:BarStaticItem x:Name="biRowValue" Content="1"/>
                 <dxb:BarStaticItem x:Name="biColumn" Content="Column:" ShowBorder="False"/>
@@ -37,11 +42,21 @@
                                 <dxb:BarButtonItemLink BarItemName="biNew"/>
                             </dxr:RibbonPageGroup>
                         </dxr:RibbonPage>
+                        <dxr:RibbonPage Caption="View">
+                            <dxr:RibbonPageGroup Caption="Show">
+                                <dxb:BarButtonItemLink BarItemName="biStructure"/>
+                                <dxb:BarButtonItemLink BarItemName="biAnalysis"/>
+                                <dxb:BarButtonItemLink BarItemName="biResult"/>
+
+                            </dxr:RibbonPageGroup>
+                        </dxr:RibbonPage>
+
                         <dxr:RibbonPage Caption="Interface">
                             <dxr:RibbonPageGroup Caption="Compatibility">
                                 <dxb:BarButtonItemLink BarItemName="biRatio"/>
                             </dxr:RibbonPageGroup>
                         </dxr:RibbonPage>
+                       
                     </dxr:RibbonDefaultPageCategory>
                 </dxr:RibbonControl>
                 <dxr:RibbonStatusBarControl DockPanel.Dock="Bottom">
@@ -59,28 +74,32 @@
                 </dxr:RibbonStatusBarControl>
                 <Grid>
                     <!--利用嵌套的DockLayoutManager控件实现多窗口布局, 其简单示例见Window1例子-->
-                    <dxdo:DockLayoutManager>
+                    <dxdo:DockLayoutManager x:Name="topLayoutManager">
                         <dxdo:LayoutGroup Caption="LayoutRoot" Orientation="Vertical">
                             <dxdo:LayoutPanel Caption="Product" ItemHeight="1.65*" ShowCaption="False">
 
-                                <dxdo:DockLayoutManager x:Name="docLayoutManager">
-                                    <dxdo:LayoutGroup GroupBorderStyle="NoBorder">
-                                        <dxdo:LayoutPanel Caption="ProductStructure" FloatOnDoubleClick="False">
-                                    <dxg:TreeListControl x:Name="productStructureTree" AutoGenerateColumns="AddNew" EnableSmartColumnsGeneration="True">
-                                        <dxg:TreeListControl.View>
-                                            <dxg:TreeListView RowDoubleClick="structureView_RowDoubleClick"  x:Name="structureView" KeyFieldName="ID" ParentFieldName="ParentID" AllowPerPixelScrolling="True" ShowTotalSummary="True" AllowEditing="False" AutoWidth="True">
+                                <dxdo:DockLayoutManager x:Name="viewerLayoutManager">
+                                    <dxdo:LayoutGroup x:Name="ProductLayoutGroup" GroupBorderStyle="NoBorder">
+                                        <dxdo:LayoutPanel x:Name="ProductStructureViewer" Caption="ProductStructure" FloatOnDoubleClick="False">
+                                            <dxg:TreeListControl x:Name="productStructureTree" AutoGenerateColumns="AddNew" EnableSmartColumnsGeneration="True">
+                                                <dxg:TreeListControl.View>
+                                                    <dxg:TreeListView RowDoubleClick="structureView_RowDoubleClick"  x:Name="structureView" KeyFieldName="ID" ParentFieldName="ParentID" AllowPerPixelScrolling="True" ShowTotalSummary="True" AllowEditing="False" AutoWidth="True">
 
-                                            </dxg:TreeListView>
-                                        </dxg:TreeListControl.View>
-                                    </dxg:TreeListControl>
-                                </dxdo:LayoutPanel>
+                                                    </dxg:TreeListView>
+                                                </dxg:TreeListControl.View>
+                                            </dxg:TreeListControl>
+                                        </dxdo:LayoutPanel>
                                         <dxdo:DocumentGroup x:Name="ProductGroup" FloatOnDoubleClick="False" GroupBorderStyle="Tabbed"/>
                                     </dxdo:LayoutGroup>                                                                                
                                 </dxdo:DockLayoutManager>
 
                             </dxdo:LayoutPanel>
                             
-                            <dxdo:DocumentGroup x:Name="AnalysisResultGroup" FloatOnDoubleClick="False" GroupBorderStyle="Tabbed" ItemHeight="0.35*"/>
+                            <dxdo:DocumentGroup x:Name="OutputGroup" FloatOnDoubleClick="False" GroupBorderStyle="Tabbed" ItemHeight="0.35*" MDIStyle="Tabbed">
+                                <dxdo:DocumentPanel x:Name="Document" Caption="Document">
+                                    <Grid/>
+                                </dxdo:DocumentPanel>
+                            </dxdo:DocumentGroup>
                         </dxdo:LayoutGroup>
                     </dxdo:DockLayoutManager>
 

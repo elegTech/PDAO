@@ -115,7 +115,8 @@ namespace P_DAO.UIController
             //mUIGrid = new Grid();
             
             //mProductInfoContainer = new GridControl();
-            //mProductInfoContainer.AutoGenerateColumns = AutoGenerateColumnsMode.AddNew;
+            
+            mProductInfoContainer.AutoGenerateColumns = AutoGenerateColumnsMode.AddNew;
             
             // 设置数据来源;
             mProductInfoContainer.ItemsSource = product.GetSubProductInfo();
@@ -129,9 +130,12 @@ namespace P_DAO.UIController
 
             view.CellStyle = (Style)Application.Current.Resources["FocusedCellStyle1"];
 
-            view.RowStyle = (Style)Application.Current.Resources["SelectedRowStyle1"];
+            //view.RowStyle = (Style)Application.Current.Resources["SelectedRowStyle1"];
 
             //view.Style = (Style)Application.Current.Resources["ViewStyle"];
+
+            // 设置是否启用条件格式化菜单功能; 
+            //view.AllowConditionalFormattingMenu = true;
 
             view.ShowFocusedRectangle = true;
 

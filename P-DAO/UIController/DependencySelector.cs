@@ -185,6 +185,7 @@ namespace P_DAO.UIController
         }
 
 
+        // 将相应Cell的外观恢复初始默认状态;
         private void RestoreAppreance(LightweightCellEditor gridCell)
         {
             if (null == gridCell)

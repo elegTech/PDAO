@@ -74,7 +74,62 @@ namespace P_DAO
             designProject.ActivateProduct();
         }
 
+        // 显示产品结构视图;
+        private void biStructure_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            object prodStructureViewer = this.FindName("ProductStructureViewer");
+            LayoutPanel panel = null ;
+            if (null != prodStructureViewer)
+            {
+                panel = prodStructureViewer as LayoutPanel;
+                if (panel.IsClosed || panel.IsHidden)
+                {
+                    object docLayoutMgr = this.FindName("viewerLayoutManager");
+                    if (null != docLayoutMgr)
+                    {
+                        DockLayoutManager group = docLayoutMgr as DockLayoutManager;
+                        group.DockController.Restore(panel);
+                    }
+                }
+            }
+        }
 
+        private void biAnalysis_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+
+        }
+
+        private void biResult_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            bool isRestored = false;
+            object obj = this.FindName("Document");
+            DocumentPanel group = null;
+            if (null != obj)
+            {
+                group = obj as DocumentPanel;
+                            
+                if (group.IsClosed || group.IsHidden)
+                {
+                    object docLayoutMgr = this.FindName("topLayoutManager");
+                    if (null != docLayoutMgr)
+                    {
+                        DockLayoutManager groupMgr = docLayoutMgr as DockLayoutManager;
+                        isRestored = groupMgr.DockController.Restore(group);
+                    }
+                }
+            }
+        }
+
+        private void ShowViewer(string viewerName)
+        {
+            if (string.IsNullOrWhiteSpace(viewerName))
+                return;
+
+            
+
+
+
+        }
 
     }
 }

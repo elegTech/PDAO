@@ -16,19 +16,27 @@ namespace P_DAO.UIController
 {
     class ProductInterfaceCompatibilityViewer : ProductViewerBase
     {
+        private DependencySelector mDependencySelector;
+
+
+
         public ProductInterfaceCompatibilityViewer(DocumentPanel uiViewer, Product product)
             : base(uiViewer, product)
         {
             mProductInfoContainer.ItemsSource = product.GetSubProductCompatibilityInfo();
+
+            mProductInfoContainer.AutoGenerateColumns = AutoGenerateColumnsMode.AddNew;
 
             // 设置表格视图显示属性;
             TableView view = (TableView)mProductInfoContainer.View;
             // 隐藏列排序设置面板, 用户可通过右键菜单显示;
             view.ShowGroupPanel = false;
 
+            view.AllowConditionalFormattingMenu = true;
+
             view.AllowEditing = false;
 
-            //view.CellStyle = (Style)Application.Current.Resources["FocusedCellStyle1"];
+            view.CellStyle = (Style)Application.Current.Resources["FocusedCellStyle1"];
 
             //view.RowStyle = (Style)Application.Current.Resources["SelectedRowStyle1"];
             
@@ -40,18 +48,34 @@ namespace P_DAO.UIController
 
             mUIViewer.Content = mUIGrid;
 
-            //view.UseLightweightTemplates = UseLightweightTemplates.All;
+            view.UseLightweightTemplates = UseLightweightTemplates.All;
 
-            //mProductInfoViewer.SelectionMode = MultiSelectMode.Cell;
+            mProductInfoContainer.SelectionMode = MultiSelectMode.Cell;
 
-            //view.NavigationStyle = GridViewNavigationStyle.Cell;
+            view.NavigationStyle = GridViewNavigationStyle.Cell;
 
-            //mProductInfoViewer.CurrentColumnChanged += CurrentColumnChanged;
-            //mProductInfoViewer.CurrentItemChanged += CurrentItemChanged;
+            mProductInfoContainer.CurrentColumnChanged += CurrentColumnChanged;
+            mProductInfoContainer.CurrentItemChanged += CurrentItemChanged;
 
+            mDependencySelector = new DependencySelector(this);
 
+            FocusedCellChangedEvent += mDependencySelector.ChangeFocusedCell;        
+        }
 
-        
+        public void CurrentItemChanged(object sender, CurrentItemChangedEventArgs e)
+        {
+            InvokeFocusedCellChangedEvent();
+            //FocusedCellChangedEvent();
+            //ChangeFocusedCell();
+            return;
+        }
+
+        public void CurrentColumnChanged(object sender, CurrentColumnChangedEventArgs e)
+        {
+            InvokeFocusedCellChangedEvent();
+            //FocusedCellChangedEvent();
+            //ChangeFocusedCell();
+            return;
         }
 
 
