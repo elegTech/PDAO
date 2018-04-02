@@ -17,6 +17,7 @@ using System.Xml;
 using System.Data;
 using System.Windows.Forms;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 
 using P_DAO.BusnessLogics;
@@ -326,7 +327,7 @@ namespace P_DAO.DomainEntities
                 child.CalculateInterfaceCompatibility();
             }
 
-            DataTable subProductCompatibilityInfoTable = GenerateEmptyTable();
+            DataTable subProductCompatibilityInfoTable = GenerateEmptyTable("System.Double");
 
             // 将当前产品参数的兼容性数值放入表中;
             DataRow row = subProductCompatibilityInfoTable.NewRow();
@@ -335,9 +336,19 @@ namespace P_DAO.DomainEntities
             //必须以数字为输入才能在TableView中支持条件格式化，即按照一定规则对相应Cell进行高亮等格式化显示;
             foreach (ProductParameter par in mParameterList)
             {
-                row[par.name] = double.Parse(par.mCompatibilityRatio.ToString("N2", CultureInfo.InvariantCulture));
+                //NumberFormatInfo nfi = new CultureInfo("en-US", false).NumberFormat;
 
-                //row[par.name] = par.mCompatibilityRatio.ToString("0.00%");
+                //string str = par.mCompatibilityRatio.ToString("P2", CultureInfo.InvariantCulture);
+
+                //string pat = @"\d+\.\d+";
+
+                //MatchCollection matches = Regex.Matches(str, pat);
+
+                //row[par.name] = double.Parse(matches[0].Value, NumberStyles.AllowDecimalPoint)/100;
+
+                //row[par.name] = double.Parse(str);
+
+                row[par.name] = par.mCompatibilityRatio;
             }
 
             subProductCompatibilityInfoTable.Rows.Add(row);
@@ -350,8 +361,10 @@ namespace P_DAO.DomainEntities
 
                 foreach (ProductParameter par in child.ParameterList)
                 {
-                    row[par.name] = double.Parse(par.mCompatibilityRatio.ToString("N2", CultureInfo.InvariantCulture));
-                    //row[par.name] = par.mCompatibilityRatio.ToString("0.00%");
+                    //NumberFormatInfo nfi = new CultureInfo("en-US", false).NumberFormat;
+                    //zh-CN
+                    //row[par.name] = double.Parse(par.mCompatibilityRatio.ToString("P", nfi));
+                    row[par.name] = par.mCompatibilityRatio;
                 }
 
                 subProductCompatibilityInfoTable.Rows.Add(row);
@@ -363,7 +376,7 @@ namespace P_DAO.DomainEntities
 
 
 
-        private DataTable GenerateEmptyTable()
+        private DataTable GenerateEmptyTable(string parameterColumnTypeName)
         {
             // 记录每个子产品输入输出参数的个数，取最大值;
             int inputParamNumMax = mParameterList.FindAll(par => par.name.StartsWith("Input_",
@@ -400,9 +413,11 @@ namespace P_DAO.DomainEntities
             for (int i = 1; i <= inputParamNumMax; i++)
             {
                 column = new DataColumn();
-                column.DataType = System.Type.GetType("System.String");
-                column.ColumnName = "Input_" + i.ToString();
+                column.DataType = System.Type.GetType(parameterColumnTypeName);
+
+                column.ColumnName = "Input_" + i.ToString();                
                 column.AutoIncrement = false;
+
                 column.Caption = "Input_" + i.ToString();
                 column.ReadOnly = true;
                 column.Unique = false;
@@ -412,10 +427,12 @@ namespace P_DAO.DomainEntities
             for (int i = 1; i <= outputParamNumMax; i++)
             {
                 column = new DataColumn();
-                column.DataType = System.Type.GetType("System.String");
+                column.DataType = System.Type.GetType(parameterColumnTypeName);
+
                 column.ColumnName = "Output_" + i.ToString();
-                column.AutoIncrement = false;
+
                 column.Caption = "Output_" + i.ToString();
+
                 column.ReadOnly = true;
                 column.Unique = false;
                 productInfoTable.Columns.Add(column);
@@ -426,10 +443,10 @@ namespace P_DAO.DomainEntities
 
 
 
-        public DataTable GetSubProductInfo()
+        public DataTable GetSubProductBaseInformation()
         {
             // 构建容纳子产品数据列表表格
-            DataTable subProductInfoTable = GenerateEmptyTable();
+            DataTable subProductInfoTable = GenerateEmptyTable("System.String");
             
             // 将当前产品信息放入表中;
             DataRow row = subProductInfoTable.NewRow();
@@ -564,8 +581,14 @@ namespace P_DAO.DomainEntities
                     double floorValueOfIntersection = list[1];
                     double ceilValueOfIntersection = list[2];
 
-                    productPar.mCompatibilityRatio = Math.Abs(ceilValueOfIntersection - floorValueOfIntersection) / Math.Abs(productPar.maxValue - productPar.minValue);
-                    tempDependentParameter.mCompatibilityRatio = Math.Abs(ceilValueOfIntersection - floorValueOfIntersection) / Math.Abs(tempDependentParameter.maxValue - tempDependentParameter.minValue);
+                    double tempVar = Math.Abs(ceilValueOfIntersection - floorValueOfIntersection) / Math.Abs(productPar.maxValue - productPar.minValue);
+
+                    // 保留两位小数;
+                    productPar.mCompatibilityRatio = double.Parse(tempVar.ToString("n2", CultureInfo.CreateSpecificCulture("zh-CN")));
+
+                    tempVar = Math.Abs(ceilValueOfIntersection - floorValueOfIntersection) / Math.Abs(tempDependentParameter.maxValue - tempDependentParameter.minValue);
+
+                    tempDependentParameter.mCompatibilityRatio = double.Parse(tempVar.ToString("n2", CultureInfo.CreateSpecificCulture("zh-CN")));
                 }
             }
         }

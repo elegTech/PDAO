@@ -27,14 +27,14 @@ namespace P_DAO.DomainEntities
         public delegate void ProductCreateEventHandler(Product product);
         public delegate void ProductLoadEventHandler(Product product);
         public delegate void ProductActivateEventHandler(string productName);
-        public delegate void RatioGenerationEventHandler(string productName);
+        public delegate void OverlapGenerationEventHandler(string productName);
 
 
         public event ProductCloseEventHandler CloseEvent;
         public event ProductCreateEventHandler ProductCreateAfterEvent;
         public event ProductLoadEventHandler ProductLoadAfterEvent;
         public event ProductActivateEventHandler ProductActivateEvent;
-        public event RatioGenerationEventHandler RatioGenerationEvent;
+        public event OverlapGenerationEventHandler OverlapGenerationEvent;
 
 
 
@@ -96,7 +96,7 @@ namespace P_DAO.DomainEntities
             ProductLoadAfterEvent += mProdInfoViewerMgr.CreateProductInformationViewer;
             ProductActivateEvent += mProdInfoViewerMgr.ShowProductInfoViewer;
 
-            RatioGenerationEvent += mProdInfoViewerMgr.CalculateProductCompatibilityRatio;
+            OverlapGenerationEvent += mProdInfoViewerMgr.CalculateProductParameterOverlap;
 
         }
 
@@ -159,7 +159,7 @@ namespace P_DAO.DomainEntities
             ProductActivateEvent(productName);   
         }
 
-        public void GenerateProuductRatio()
+        public void GenerateProuductParameterOverlap()
         {
             if (null == mRootProduct)
                 return;
@@ -168,7 +168,7 @@ namespace P_DAO.DomainEntities
             if (string.IsNullOrEmpty(productName))
                 return;
 
-            RatioGenerationEvent(productName);        
+            OverlapGenerationEvent(productName);        
         }
 
 

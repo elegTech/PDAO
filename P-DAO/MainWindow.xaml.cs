@@ -51,9 +51,9 @@ namespace P_DAO
         }
 
 
-        private void biRatio_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) 
+        private void biOverlap_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) 
         {
-            designProject.GenerateProuductRatio();
+            designProject.GenerateProuductParameterOverlap();
         }
         
 
@@ -89,6 +89,8 @@ namespace P_DAO
                     {
                         DockLayoutManager group = docLayoutMgr as DockLayoutManager;
                         group.DockController.Restore(panel);
+
+
                     }
                 }
             }
@@ -96,13 +98,37 @@ namespace P_DAO
 
         private void biAnalysis_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
         {
-
+            object docLayoutMgr = this.FindName("viewerLayoutManager");
+            if (null != docLayoutMgr)
+            {
+                DockLayoutManager group = docLayoutMgr as DockLayoutManager;
+                BaseLayoutItem viewer = null;
+                if (group.HiddenItems.Count != 0)
+                {
+                    viewer = group.HiddenItems.First(panel => panel is DocumentPanel);
+                    group.DockController.Restore(viewer);
+                    if (null != viewer)
+                    {
+                        group.DockController.Restore(viewer);
+                        return;
+                    }
+                }
+                if (group.ClosedPanels.Count != 0)
+                {
+                    viewer = group.ClosedPanels.First(panel => panel is DocumentPanel);
+                    if (null != viewer)
+                    {
+                        group.DockController.Restore(viewer);
+                        return;
+                    }
+                }
+            }
         }
 
         private void biResult_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
         {
             bool isRestored = false;
-            object obj = this.FindName("Document");
+            object obj = this.FindName("ResultPanel");
             DocumentPanel group = null;
             if (null != obj)
             {

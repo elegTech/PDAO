@@ -34,7 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Images\plane_128px.net.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />
@@ -156,9 +157,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\plane_128px.net.ico" />
-  </ItemGroup>
-  <ItemGroup>
+    <Folder Include="Images\" />
     <Folder Include="Themes\" />
     <Folder Include="UI\" />
   </ItemGroup>

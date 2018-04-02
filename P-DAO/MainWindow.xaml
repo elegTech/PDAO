@@ -9,7 +9,7 @@
             <dxb:BarManager.Items>
                 <dxb:BarButtonItem x:Name="biOpen" ItemClick="biOpen_ItemClick" Content="Open" Glyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/Open_16x16.png" LargeGlyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/Open_32x32.png"/>
                 <dxb:BarButtonItem x:Name="biNew" ItemClick="biNew_ItemClick"  Content="New" Glyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/New_16x16.png" LargeGlyph="pack://application:,,,/DevExpress.Images.v14.1;component/Images/Actions/New_32x32.png"/>
-                <dxb:BarButtonItem x:Name="biRatio" ItemClick="biRatio_ItemClick" Content="Ratio" LargeGlyph="{dx:DXImage Image=AlignVerticalCenter_32x32.png}" Glyph="{dx:DXImage Image=AlignVerticalCenter_32x32.png}" />
+                <dxb:BarButtonItem x:Name="biOverlap" ItemClick="biOverlap_ItemClick" Content="Overlap" LargeGlyph="{dx:DXImage Image=AlignVerticalCenter_32x32.png}" Glyph="{dx:DXImage Image=AlignVerticalCenter_32x32.png}" />
                 <dxb:BarButtonItem x:Name="biStructure" ItemClick="biStructure_ItemClick" Content="Structure" Glyph="{dx:DXImage Image=DocumentMap_16x16.png}" LargeGlyph="{dx:DXImage Image=DocumentMap_32x32.png}"/>
                 <dxb:BarButtonItem x:Name="biAnalysis" ItemClick="biAnalysis_ItemClick" Content="Analysis" RibbonStyle="Large" Glyph="{dx:DXImage Image=Cards_16x16.png}" LargeGlyph="{dx:DXImage Image=Cards_32x32.png}"/>
                 <dxb:BarButtonItem x:Name="biResult" ItemClick="biResult_ItemClick" Content="Result" Glyph="{dx:DXImage Image=ConvertToParagraphs_16x16.png}" LargeGlyph="{dx:DXImage Image=ConvertToParagraphs_32x32.png}" RibbonStyle="Large"/>
@@ -53,7 +53,7 @@
 
                         <dxr:RibbonPage Caption="Interface">
                             <dxr:RibbonPageGroup Caption="Compatibility">
-                                <dxb:BarButtonItemLink BarItemName="biRatio"/>
+                                <dxb:BarButtonItemLink BarItemName="biOverlap"/>
                             </dxr:RibbonPageGroup>
                         </dxr:RibbonPage>
                        
@@ -96,8 +96,10 @@
                             </dxdo:LayoutPanel>
                             
                             <dxdo:DocumentGroup x:Name="OutputGroup" FloatOnDoubleClick="False" GroupBorderStyle="Tabbed" ItemHeight="0.35*" MDIStyle="Tabbed">
-                                <dxdo:DocumentPanel x:Name="Document" Caption="Document">
-                                    <Grid/>
+                                <dxdo:DocumentPanel x:Name="ResultPanel" Caption="Result">                                    
+                                    <Grid>
+                                        <TextBlock/>
+                                    </Grid>
                                 </dxdo:DocumentPanel>
                             </dxdo:DocumentGroup>
                         </dxdo:LayoutGroup>

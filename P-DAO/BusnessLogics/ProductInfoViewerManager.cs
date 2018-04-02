@@ -36,6 +36,10 @@ namespace P_DAO.BusnessLogics
 
         Dictionary<Product, ProductInterfaceCompatibilityViewer> mProduct2CompViewerDictionary;
 
+        public enum ViewerType
+        { 
+            BaseView, CompRatio, Result
+        }
 
         private Product rootProduct;
 
@@ -77,12 +81,12 @@ namespace P_DAO.BusnessLogics
         //}
 
 
-        private DocumentPanel CreateNewPanel(string productName)
+        private DocumentPanel CreateNewPanel(string productName, ViewerType viewType)
         {
             DocumentPanel panel = new DocumentPanel();
             panel.Visibility = System.Windows.Visibility.Hidden;
-            panel.Caption = productName;
-            panel.Name = productName;
+            panel.Caption = productName + "_" + viewType.ToString();
+            panel.Name = productName + "_" + viewType.ToString();
             mProductInfoUIViewers.Add(panel);
             panel.Visibility = System.Windows.Visibility.Visible;
             int index = mProductInfoUIViewers.Items.IndexOf(panel);
@@ -105,7 +109,7 @@ namespace P_DAO.BusnessLogics
             {
                 return;
             }
-            DocumentPanel panel = CreateNewPanel(product.Name);
+            DocumentPanel panel = CreateNewPanel(product.Name, ViewerType.BaseView);
 
             ProductInformationViewer productInfoViewer = new ProductInformationViewer(panel, product);
             mProduct2ViewerDictionary.Add(product, productInfoViewer);
@@ -120,7 +124,7 @@ namespace P_DAO.BusnessLogics
                 return;
             }
 
-            DocumentPanel panel = CreateNewPanel(product.Name);
+            DocumentPanel panel = CreateNewPanel(product.Name, ViewerType.CompRatio);
 
             ProductInterfaceCompatibilityViewer productInfoViewer = new ProductInterfaceCompatibilityViewer(panel, product);
             mProduct2CompViewerDictionary.Add(product, productInfoViewer);
@@ -147,7 +151,7 @@ namespace P_DAO.BusnessLogics
             }
         }
 
-        public void CalculateProductCompatibilityRatio(string productName)
+        public void CalculateProductParameterOverlap(string productName)
         {
             if (string.IsNullOrWhiteSpace(productName))
                 return;

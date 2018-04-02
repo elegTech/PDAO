@@ -119,7 +119,7 @@ namespace P_DAO.UIController
             mProductInfoContainer.AutoGenerateColumns = AutoGenerateColumnsMode.AddNew;
             
             // 设置数据来源;
-            mProductInfoContainer.ItemsSource = product.GetSubProductInfo();
+            mProductInfoContainer.ItemsSource = product.GetSubProductBaseInformation();
 
             // 设置表格视图显示属性;
             TableView view = (TableView)mProductInfoContainer.View;
@@ -159,12 +159,6 @@ namespace P_DAO.UIController
             FocusedCellChangedEvent += mDependencySelector.ChangeFocusedCell;
 
             //view.FocusedRowHandleChanged +=view_FocusedRowHandleChanged;
-        }
-
-        public void view_FocusedRowHandleChanged(object sender, FocusedRowHandleChangedEventArgs e)
-        {
-
-
         }
 
         public void CurrentItemChanged(object sender, CurrentItemChangedEventArgs e)
