@@ -14,6 +14,7 @@ namespace P_DAO.Serialization
 {
     class Serializer
     {
+
         public static Product LoadProduct(string xmlFilePath)
         {
             if (String.IsNullOrWhiteSpace(xmlFilePath))
@@ -23,6 +24,9 @@ namespace P_DAO.Serialization
                 return null;
 
             XDocument xml = Utilities.LoadXMLFile(xmlFilePath);
+
+            if (!Utilities.IsLegal(xml))
+                return null;
 
             if (null != xml)
                 return new Product(xml.Root, null);

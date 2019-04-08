@@ -257,32 +257,32 @@ namespace P_DAO.DomainEntities
             if (null == this.mProductXML || false == this.mProductXML.HasElements)
                 return;
 
-            var dependencyList = this.mProductXML.Elements("Dependency").ToList();
+            var dependencyList = this.mProductXML.Elements(Utilities.DEPNODENAME).ToList();
             foreach (XElement dependencyElmt in dependencyList)
             {
                 ProductDependency prodDep = new ProductDependency();
 
                 // 依赖的源产品为当前节点产品或某一子产品
-                if (dependencyElmt.Attribute("SourceProduct").Value == this.ID)
+                if (dependencyElmt.Attribute(Utilities.SOURCEPRODATTRNAME).Value == this.ID)
                     prodDep.sourceProduct = this;
                 else
                     prodDep.sourceProduct = mChildProductList.Find(prod => string.Equals(prod.ID,
-                                                       dependencyElmt.Attribute("SourceProduct").Value,
+                                                       dependencyElmt.Attribute(Utilities.SOURCEPRODATTRNAME).Value,
                                                        StringComparison.CurrentCultureIgnoreCase));
                 
                 // 依赖的目标产品为当前节点产品或某一子产品
-                if (dependencyElmt.Attribute("TargetProduct").Value == this.ID)
+                if (dependencyElmt.Attribute(Utilities.TARGETPRODATTRNAME).Value == this.ID)
                     prodDep.targetProduct = this;
                 else
                     prodDep.targetProduct = mChildProductList.Find(prod => string.Equals(prod.ID,
-                                                            dependencyElmt.Attribute("TargetProduct").Value,
+                                                            dependencyElmt.Attribute(Utilities.TARGETPRODATTRNAME).Value,
                                                             StringComparison.CurrentCultureIgnoreCase));
                
                 prodDep.targetParameter = prodDep.targetProduct.ParameterList.Find(par => string.Equals(par.name,
-                                                                                    dependencyElmt.Attribute("TargetPar").Value,
+                                                                                    dependencyElmt.Attribute(Utilities.TARGETPARATTRNAME).Value,
                                                                                     StringComparison.CurrentCultureIgnoreCase));
                 prodDep.sourceParameter = prodDep.sourceProduct.ParameterList.Find(par => string.Equals(par.name,
-                                                                                    dependencyElmt.Attribute("SourcePar").Value,
+                                                                                    dependencyElmt.Attribute(Utilities.SOURCEPARATTRNAME).Value,
                                                                                     StringComparison.CurrentCultureIgnoreCase));
                 this.mDependencyList.Add(prodDep);                
             }
@@ -379,14 +379,14 @@ namespace P_DAO.DomainEntities
         private DataTable GenerateEmptyTable(string parameterColumnTypeName)
         {
             // 记录每个子产品输入输出参数的个数，取最大值;
-            int inputParamNumMax = mParameterList.FindAll(par => par.name.StartsWith("Input_",
+            int inputParamNumMax = mParameterList.FindAll(par => par.name.StartsWith(Utilities.INPUTATTRNAME+Utilities.ATTRNUMSEPARATOR,
                     StringComparison.CurrentCultureIgnoreCase)).Count;
 
             int outputParamNumMax = mParameterList.Count - inputParamNumMax;
 
             foreach (Product prod in mChildProductList)
             {
-                int inputParNum = prod.mParameterList.FindAll(par => par.name.StartsWith("Input_",
+                int inputParNum = prod.mParameterList.FindAll(par => par.name.StartsWith(Utilities.INPUTATTRNAME+Utilities.ATTRNUMSEPARATOR,
                     StringComparison.CurrentCultureIgnoreCase)).Count;
 
                 int onputParNum = prod.mParameterList.Count - inputParNum;
@@ -415,10 +415,10 @@ namespace P_DAO.DomainEntities
                 column = new DataColumn();
                 column.DataType = System.Type.GetType(parameterColumnTypeName);
 
-                column.ColumnName = "Input_" + i.ToString();                
+                column.ColumnName = Utilities.INPUTATTRNAME+Utilities.ATTRNUMSEPARATOR + i.ToString();                
                 column.AutoIncrement = false;
 
-                column.Caption = "Input_" + i.ToString();
+                column.Caption = Utilities.INPUTATTRNAME+Utilities.ATTRNUMSEPARATOR + i.ToString();
                 column.ReadOnly = true;
                 column.Unique = false;
                 productInfoTable.Columns.Add(column);
@@ -429,9 +429,9 @@ namespace P_DAO.DomainEntities
                 column = new DataColumn();
                 column.DataType = System.Type.GetType(parameterColumnTypeName);
 
-                column.ColumnName = "Output_" + i.ToString();
+                column.ColumnName = Utilities.OUTPUTATTRNAME+Utilities.ATTRNUMSEPARATOR + i.ToString();
 
-                column.Caption = "Output_" + i.ToString();
+                column.Caption = Utilities.OUTPUTATTRNAME+Utilities.ATTRNUMSEPARATOR + i.ToString();
 
                 column.ReadOnly = true;
                 column.Unique = false;
@@ -584,11 +584,11 @@ namespace P_DAO.DomainEntities
                     double tempVar = Math.Abs(ceilValueOfIntersection - floorValueOfIntersection) / Math.Abs(productPar.maxValue - productPar.minValue);
 
                     // 保留两位小数;
-                    productPar.mCompatibilityRatio = double.Parse(tempVar.ToString("n2", CultureInfo.CreateSpecificCulture("zh-CN")));
+                    productPar.mCompatibilityRatio = double.Parse(tempVar.ToString(Utilities.PRECISION, CultureInfo.CreateSpecificCulture(Utilities.CULTURE)));
 
                     tempVar = Math.Abs(ceilValueOfIntersection - floorValueOfIntersection) / Math.Abs(tempDependentParameter.maxValue - tempDependentParameter.minValue);
 
-                    tempDependentParameter.mCompatibilityRatio = double.Parse(tempVar.ToString("n2", CultureInfo.CreateSpecificCulture("zh-CN")));
+                    tempDependentParameter.mCompatibilityRatio = double.Parse(tempVar.ToString(Utilities.PRECISION, CultureInfo.CreateSpecificCulture(Utilities.CULTURE)));
                 }
             }
         }

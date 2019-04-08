@@ -127,6 +127,19 @@ namespace P_DAO
 
         private void biResult_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
         {
+
+            Window1 win = new Window1();
+
+            win.Width = SystemParameters.PrimaryScreenWidth;
+            win.Height = SystemParameters.PrimaryScreenHeight;
+
+            //win.size
+
+            win.Show();
+
+            return;
+
+
             bool isRestored = false;
             object obj = this.FindName("ResultPanel");
             DocumentPanel group = null;
